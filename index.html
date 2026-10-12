@@ -2,449 +2,557 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Analisis Warna PDF</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generator Teks Undangan Pernikahan</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f0f11',
+                            800: '#1a1a1e',
+                            700: '#27272c'
+                        },
+                        gold: {
+                            300: '#e8c97e',
+                            500: '#d4af37',
+                            700: '#aa8c2c'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        mono: ['Consolas', 'Monaco', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Custom Scrollbar untuk desktop dan mobile */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-            height: 6px; /* Tinggi scrollbar untuk horizontal scroll */
+        body {
+            background-color: #0f0f11;
+            color: #f3f4f6;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9; 
-            border-radius: 8px;
+        
+        /* Custom Scrollbar for elegant look */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 8px;
+        ::-webkit-scrollbar-track {
+            background: #1a1a1e; 
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37; 
+            border-radius: 4px;
         }
-        .drag-active {
-            border-color: #3b82f6 !important;
-            background-color: #eff6ff !important;
+        ::-webkit-scrollbar-thumb:hover {
+            background: #aa8c2c; 
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .input-field {
+            width: 100%;
+            background-color: #27272c;
+            color: #ffffff;
+            border: 1px solid #3f3f46;
+            border-radius: 0.375rem;
+            padding: 0.75rem 1rem;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
+        }
+
+        .input-label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #9ca3af;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+        
+        fieldset {
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            background-color: #1a1a1e;
+        }
+
+        legend {
+            font-family: "Playfair Display", serif;
+            color: #d4af37;
+            padding: 0 0.75rem;
+            font-size: 1.25rem;
+            font-style: italic;
+        }
+
+        .toast-enter {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .toast-exit {
+            transform: translateY(100%);
+            opacity: 0;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
-    
-    <div class="flex-grow w-full max-w-5xl mx-auto px-4 py-6 sm:px-6 md:py-10">
+<body class="min-h-screen relative pb-12 lg:pb-0">
+
+    <header class="bg-dark-800 border-b border-gold-500/20 py-6 sticky top-0 z-20 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-serif text-gold-500">Royal Invitation Text</h1>
+                <p class="text-xs md:text-sm text-gray-400 mt-1">Generator Format Pesan WhatsApp Pernikahan</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8">
         
-        <header class="text-center mb-8 md:mb-10">
-            <div class="inline-flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-2xl bg-blue-600 text-white shadow-lg shadow-blue-200 mb-4 md:mb-5 transition-transform hover:scale-105 duration-200">
-                <i class="fa-solid fa-chart-pie text-2xl md:text-3xl"></i>
-            </div>
-            <h1 class="text-2xl md:text-4xl font-extrabold text-slate-800 mb-3 tracking-tight">Analisis Warna PDF</h1>
-            <p class="text-sm md:text-base text-slate-500 max-w-2xl mx-auto leading-relaxed">
-                Kalkulasi dan kategorikan halaman PDF Anda berdasarkan penggunaan warna (Hitam Putih, Berwarna &le; 50%, dan Berwarna &gt; 50%). Seluruh proses dilakukan di perangkat Anda.
-            </p>
-        </header>
-
-        <div id="error-container" class="hidden bg-red-50 border border-red-200 p-4 mb-6 rounded-xl shadow-sm mx-auto max-w-3xl">
-            <div class="flex items-center">
-                <i class="fa-solid fa-triangle-exclamation text-red-500 mr-3 text-lg"></i>
-                <p id="error-message" class="text-sm md:text-base text-red-700 font-medium"></p>
-            </div>
-        </div>
-
-        <div id="upload-section" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 md:p-8 mx-auto max-w-3xl">
-            <div id="drop-zone" class="border-2 border-dashed border-slate-300 rounded-xl p-6 md:p-10 text-center transition-all duration-200 hover:bg-slate-50 hover:border-blue-300 cursor-pointer group">
-                <input type="file" id="file-input" class="hidden" accept=".pdf" multiple />
-                <i class="fa-solid fa-cloud-arrow-up text-4xl md:text-5xl text-slate-300 group-hover:text-blue-500 mb-4 transition-colors"></i>
-                <h3 class="text-base md:text-lg font-semibold text-slate-700 mb-2">Pilih atau Tarik File PDF ke sini</h3>
-                <p class="text-xs md:text-sm text-slate-500 mb-6">Mendukung format .pdf (Bisa pilih lebih dari satu file)</p>
-                <button id="browse-btn" class="w-full sm:w-auto px-6 py-3 sm:py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-medium rounded-lg shadow-sm transition-colors duration-200">
-                    Cari File PDF
-                </button>
-            </div>
-        </div>
-
-        <div id="progress-section" class="hidden bg-white rounded-2xl shadow-sm border border-slate-100 p-6 md:p-8 mx-auto max-w-3xl text-center">
-            <h3 class="text-lg font-semibold text-slate-700 mb-6">Menganalisis File...</h3>
+        <!-- Left Column: Form Inputs -->
+        <div class="w-full lg:w-1/2 space-y-2">
+            <p class="text-sm text-gray-400 mb-6">Lengkapi data di bawah ini. Teks akan otomatis terbuat di panel sebelah kanan.</p>
             
-            <div class="mb-5 text-left">
-                <div class="flex justify-between text-xs md:text-sm text-slate-500 mb-2 font-medium">
-                    <span id="overall-progress-text" class="truncate pr-4">File 0 dari 0</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-2 md:h-2.5 overflow-hidden">
-                    <div id="overall-progress-bar" class="bg-indigo-500 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
+            <form id="invitationForm" onsubmit="event.preventDefault();">
+                <!-- Susunan Nama -->
+                <fieldset>
+                    <legend>Pengaturan Posisi</legend>
+                    <div class="input-group">
+                        <label class="input-label" for="susunan">Susunan Nama Lebih Dulu</label>
+                        <select id="susunan" class="input-field cursor-pointer">
+                            <option value="wanita">Wanita Dulu (Mempelai Wanita di Atas)</option>
+                            <option value="pria">Pria Dulu (Mempelai Pria di Atas)</option>
+                        </select>
+                    </div>
+                </fieldset>
 
-            <div class="text-left">
-                <div class="flex justify-between text-xs md:text-sm text-slate-500 mb-2 font-medium">
-                    <span id="progress-text">Halaman 0 dari 0</span>
-                    <span id="progress-percentage">0%</span>
-                </div>
-                <div class="w-full bg-slate-100 rounded-full h-3 md:h-4 overflow-hidden relative">
-                    <div id="progress-bar" class="bg-blue-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
-                </div>
-            </div>
-            
-            <p class="text-xs text-slate-400 mt-6 bg-slate-50 p-3 rounded-lg inline-block">
-                <i class="fa-solid fa-circle-info mr-1"></i> Mohon tunggu, proses ini mungkin memakan waktu tergantung jumlah dan ukuran file. Layar mungkin terlihat sibuk sesaat.
-            </p>
+                <fieldset>
+                    <legend>Mempelai Wanita</legend>
+                    <div class="input-group">
+                        <label class="input-label" for="wNama">Nama Lengkap & Gelar</label>
+                        <input type="text" id="wNama" class="input-field" value="Rezky Hulwani, S.Kes" placeholder="Contoh: Rezky Hulwani, S.Kes">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="input-group">
+                            <label class="input-label" for="wAnak">Anak Ke-</label>
+                            <input type="text" id="wAnak" class="input-field" value="-" placeholder="Contoh: 1, 2, atau -">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="wBapak">Nama Bapak</label>
+                            <input type="text" id="wBapak" class="input-field" value="-" placeholder="Isi '-' jika ingin disembunyikan">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="wIbu">Nama Ibu</label>
+                            <input type="text" id="wIbu" class="input-field" value="-" placeholder="Isi '-' jika ingin disembunyikan">
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua akan disembunyikan jika kolom Anak, Bapak, & Ibu diisi tanda strip (-).</p>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Mempelai Pria</legend>
+                    <div class="input-group">
+                        <label class="input-label" for="pNama">Nama Lengkap & Gelar</label>
+                        <input type="text" id="pNama" class="input-field" value="Muh. Danang Kiwalo Ikhsan" placeholder="Contoh: Muh. Danang Kiwalo Ikhsan">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="input-group">
+                            <label class="input-label" for="pAnak">Anak Ke-</label>
+                            <input type="text" id="pAnak" class="input-field" value="-" placeholder="Contoh: 1, 2, atau -">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="pBapak">Nama Bapak</label>
+                            <input type="text" id="pBapak" class="input-field" value="-" placeholder="Isi '-' jika ingin disembunyikan">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="pIbu">Nama Ibu</label>
+                            <input type="text" id="pIbu" class="input-field" value="-" placeholder="Isi '-' jika ingin disembunyikan">
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Waktu & Tempat Acara</legend>
+                    <div class="input-group">
+                        <label class="input-label" for="tanggal">Hari dan Tanggal Acara</label>
+                        <input type="text" id="tanggal" class="input-field" value="Minggu, 08 November 2026">
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="input-group">
+                            <label class="input-label" for="jamAkad">Waktu / Pukul Akad</label>
+                            <input type="text" id="jamAkad" class="input-field" value="10.00 Wita">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label" for="jamResepsi">Waktu / Pukul Resepsi</label>
+                            <input type="text" id="jamResepsi" class="input-field" value="11.00 WITA - Selesai">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label class="input-label" for="tempat">Nama Tempat / Gedung</label>
+                        <input type="text" id="tempat" class="input-field" value="Gedung Balai Mutiara">
+                    </div>
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="alamat">Alamat Lengkap</label>
+                        <textarea id="alamat" rows="2" class="input-field resize-none">Jl. Nikel Raya, Balla Parang, Kec. Rappocini, Kota Makassar</textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Penutup</legend>
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="hormat">Hormat Kami (Tuan Rumah)</label>
+                        <input type="text" id="hormat" class="input-field" value="Bpk. Samsul & Ny Ruth">
+                    </div>
+                </fieldset>
+            </form>
         </div>
 
-        <div id="results-section" class="hidden space-y-6">
-            
-            <!-- Summary Cards (Responsive Grid) -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <!-- BW Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center transition-all hover:shadow-md">
-                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 mr-4 shrink-0">
-                        <i class="fa-solid fa-file-lines text-xl md:text-2xl"></i>
+        <div class="w-full lg:w-1/2">
+            <div class="sticky top-28 bg-dark-800 p-1 rounded-xl border border-gold-500/30 shadow-2xl">
+                <div class="bg-dark-900 rounded-lg p-4 md:p-6 h-[75vh] md:h-[85vh] flex flex-col relative">
+                    
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-gold-500 font-serif text-xl flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Live Preview Teks
+                        </h2>
                     </div>
-                    <div>
-                        <p class="text-xs md:text-sm text-slate-500 font-medium">Total Hitam Putih</p>
-                        <h4 id="count-bw" class="text-2xl md:text-3xl font-bold text-slate-700">0</h4>
-                    </div>
-                </div>
-                
-                <!-- Light Color Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center transition-all hover:shadow-md">
-                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 mr-4 shrink-0">
-                        <i class="fa-solid fa-file-image text-xl md:text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs md:text-sm text-slate-500 font-medium">Warna &le; 50%</p>
-                        <h4 id="count-light" class="text-2xl md:text-3xl font-bold text-slate-700">0</h4>
-                    </div>
-                </div>
-                
-                <!-- Heavy Color Card -->
-                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 flex items-center transition-all hover:shadow-md">
-                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-purple-50 flex items-center justify-center text-purple-600 mr-4 shrink-0">
-                        <i class="fa-solid fa-palette text-xl md:text-2xl"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs md:text-sm text-slate-500 font-medium">Warna &gt; 50%</p>
-                        <h4 id="count-heavy" class="text-2xl md:text-3xl font-bold text-slate-700">0</h4>
-                    </div>
-                </div>
-            </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden flex flex-col">
-                <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-slate-50">
-                    <h3 class="font-semibold text-slate-700">Rincian Per File</h3>
-                    <button id="reset-btn" class="w-full sm:w-auto px-5 py-2.5 text-sm bg-white border border-slate-300 hover:bg-slate-50 active:bg-slate-100 text-slate-700 font-medium rounded-lg shadow-sm transition-colors duration-200 flex items-center justify-center">
-                        <i class="fa-solid fa-rotate-right mr-2"></i>Analisis File Baru
-                    </button>
-                </div>
-                
-                <!-- Table Wrapper for Horizontal Scroll on Mobile -->
-                <div class="w-full overflow-x-auto custom-scrollbar">
-                    <table class="w-full text-left text-sm text-slate-600 min-w-[650px]">
-                        <thead class="text-xs text-slate-500 uppercase bg-slate-50/80 sticky top-0">
-                            <tr>
-                                <th scope="col" class="px-5 py-4 font-semibold">Nama File</th>
-                                <th scope="col" class="px-5 py-4 text-center font-semibold">Total Halaman</th>
-                                <th scope="col" class="px-5 py-4 text-center font-semibold">Hitam Putih</th>
-                                <th scope="col" class="px-5 py-4 text-center font-semibold">Warna &le; 50%</th>
-                                <th scope="col" class="px-5 py-4 text-center font-semibold">Warna &gt; 50%</th>
-                            </tr>
-                        </thead>
-                        <tbody id="details-table-body" class="divide-y divide-slate-100">
-                            <!-- Rows will be populated by JS -->
-                        </tbody>
-                    </table>
+                    <!-- The Textarea for the generated text -->
+                    <textarea id="previewText" readonly 
+                        class="w-full flex-grow bg-transparent text-gray-200 font-mono text-sm resize-none focus:outline-none custom-scrollbar leading-relaxed"
+                        style="scrollbar-width: thin; scrollbar-color: #d4af37 transparent;"></textarea>
+
+                    <!-- Copy Buttons Container -->
+                    <div class="mt-4 grid grid-cols-2 gap-2 md:gap-3">
+                        <button onclick="copyFullText()" class="col-span-2 bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            Salin Semua Teks
+                        </button>
+                        
+                        <button onclick="copyGroomName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Nama Pria
+                        </button>
+
+                        <button onclick="copyBrideName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Nama Wanita
+                        </button>
+
+                        <button onclick="copyAddress()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Lokasi
+                        </button>
+                        
+                        <button onclick="copyHostName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Pengundang
+                        </button>
+
+                        <button onclick="copyTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Waktu
+                        </button>
+
+                        <button onclick="copyDate()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Tanggal
+                        </button>
+
+                        <button onclick="copyMonth()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Bulan
+                        </button>
+
+                        <button onclick="copyYear()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Tahun
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+    </main>
+
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 z-50 pointer-events-none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
     </div>
 
-    <!-- Hidden canvas for rendering PDF pages for analysis -->
-    <canvas id="pdf-canvas" class="hidden"></canvas>
-
-    <!-- Load PDF.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
     <script>
-        // Setup PDF.js worker
-        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-        // DOM Elements
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const browseBtn = document.getElementById('browse-btn');
-        const uploadSection = document.getElementById('upload-section');
-        const progressSection = document.getElementById('progress-section');
-        const resultsSection = document.getElementById('results-section');
-        const errorContainer = document.getElementById('error-container');
-        const errorMessage = document.getElementById('error-message');
-        
-        const overallProgressBar = document.getElementById('overall-progress-bar');
-        const overallProgressText = document.getElementById('overall-progress-text');
-        
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const progressPercentage = document.getElementById('progress-percentage');
-        
-        const countBwEl = document.getElementById('count-bw');
-        const countLightEl = document.getElementById('count-light');
-        const countHeavyEl = document.getElementById('count-heavy');
-        const detailsTableBody = document.getElementById('details-table-body');
-        const resetBtn = document.getElementById('reset-btn');
-
-        const canvas = document.getElementById('pdf-canvas');
-        const ctx = canvas.getContext('2d', { willReadFrequently: true });
-
-        // Configuration
-        const RENDER_SCALE = 0.3; 
-        const COLOR_THRESHOLD = 15;
-        const NOISE_TOLERANCE = 0.1;
-
-        browseBtn.addEventListener('click', () => fileInput.click());
-        dropZone.addEventListener('click', (e) => {
-            // Prevent triggering twice if button is clicked
-            if(e.target === dropZone || e.target.tagName === 'H3' || e.target.tagName === 'P' || e.target.tagName === 'I') {
-                fileInput.click();
-            }
-        });
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('drag-active');
-        });
-
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('drag-active');
-        });
-
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('drag-active');
+        // Setup event listeners for auto-generation
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', generateText);
+            });
             
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-                processMultipleFiles(e.dataTransfer.files);
-            }
+            // Generate initial text
+            generateText();
         });
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files && e.target.files.length > 0) {
-                processMultipleFiles(e.target.files);
-            }
-        });
-
-        resetBtn.addEventListener('click', resetUI);
-
-        function showError(msg) {
-            if (errorMessage) errorMessage.textContent = msg;
-            if (errorContainer) {
-                errorContainer.classList.remove('hidden');
-                window.scrollTo(0, 0);
-            }
+        // Helper function to check if field is valid/not empty/not dash
+        function isValid(str) {
+            if (!str) return false;
+            const cleanStr = str.trim();
+            return cleanStr !== '' && cleanStr !== '-';
         }
 
-        function hideError() {
-            if (errorContainer) {
-                errorContainer.classList.add('hidden');
+        // Format parent info line conditionally
+        function getParentText(jenis, anak, bapak, ibu) {
+            const hasAnak = isValid(anak);
+            const hasBapak = isValid(bapak);
+            const hasIbu = isValid(ibu);
+
+            // If completely empty/dashed based on user inputs
+            if (!hasAnak && !hasBapak && !hasIbu) {
+                return "";
             }
+
+            let text = "";
+            let title = jenis === 'wanita' ? 'Putri' : 'Putra';
+
+            if (hasAnak) {
+                text += `${title} ke-${anak.trim()} dari `;
+            } else {
+                text += `${title} dari `;
+            }
+
+            if (hasBapak && hasIbu) {
+                text += `Bapak ${bapak.trim()} & Ibu ${ibu.trim()}`;
+            } else if (hasBapak) {
+                text += `Bapak ${bapak.trim()}`;
+            } else if (hasIbu) {
+                text += `Ibu ${ibu.trim()}`;
+            } else {
+                // edge case where only "anak ke" is filled but no parent names
+                text = text.trim();
+                if (text.endsWith("dari")) {
+                    text = text.substring(0, text.length - 4).trim();
+                }
+            }
+
+            return text;
         }
 
-        function resetUI() {
-            uploadSection.classList.remove('hidden');
-            progressSection.classList.add('hidden');
-            resultsSection.classList.add('hidden');
-            hideError();
-            fileInput.value = '';
-            detailsTableBody.innerHTML = '';
-            if(countBwEl) countBwEl.textContent = '0';
-            if(countLightEl) countLightEl.textContent = '0';
-            if(countHeavyEl) countHeavyEl.textContent = '0';
+        // Main text generation logic
+        function generateText() {
+            // Get values
+            const susunan = document.getElementById('susunan').value;
+            
+            const wNama = document.getElementById('wNama').value.trim();
+            const wAnak = document.getElementById('wAnak').value;
+            const wBapak = document.getElementById('wBapak').value;
+            const wIbu = document.getElementById('wIbu').value;
+            
+            const pNama = document.getElementById('pNama').value.trim();
+            const pAnak = document.getElementById('pAnak').value;
+            const pBapak = document.getElementById('pBapak').value;
+            const pIbu = document.getElementById('pIbu').value;
+            
+            const tanggal = document.getElementById('tanggal').value.trim();
+            const jamAkad = document.getElementById('jamAkad').value.trim();
+            const jamResepsi = document.getElementById('jamResepsi').value.trim();
+            const tempat = document.getElementById('tempat').value.trim();
+            const alamat = document.getElementById('alamat').value.trim();
+            const hormat = document.getElementById('hormat').value.trim();
+
+            // Construct Mempelai Blocks
+            const wParentStr = getParentText('wanita', wAnak, wBapak, wIbu);
+            const wBlock = wNama + (wParentStr ? `\n${wParentStr}` : "");
+
+            const pParentStr = getParentText('pria', pAnak, pBapak, pIbu);
+            const pBlock = pNama + (pParentStr ? `\n${pParentStr}` : "");
+
+            // Arrange based on order selection
+            let block1 = susunan === 'wanita' ? wBlock : pBlock;
+            let block2 = susunan === 'wanita' ? pBlock : wBlock;
+
+            // Template Construction
+            const template = `Bismillahirrahmanirrahim
+Assalamu'alaikum Warahmatullahi Wabarakatuh
+Dengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,
+kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri
+acara pernikahan putra-putri kami:
+
+${block1}
+
+&
+
+${block2}
+
+DOA UNTUK PENGANTIN
+Barakallahu Laka, Wa Baraka 'alaika Wa Jama'a Bainakuma Fii Khair
+"Mudah-mudahan Allah memberkahimu, baik ketika senang maupun susah
+dan selalu mengumpulkan kalian berdua dalam kebaikan."
+(H.R. Abu Daud)
+
+yang insyaa Allah akan dilaksanakan pada:
+
+${tanggal}
+
+AKAD NIKAH
+Pukul ${jamAkad}
+
+RESEPSI
+Pukul ${jamResepsi}
+
+Bertempat di
+${tempat}
+${alamat}
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
+berkenan hadir dan memberikan doa restu kepada kedua mempelai.
+Atas kehadirannya kami ucapkan terimakasih.
+
+Wassalamu'alaikum Warahmatullahi Wabarakatuh
+
+Hormat kami yang mengundang
+${hormat}
+Kedua Mempelai`;
+
+            // Output to textarea
+            document.getElementById('previewText').value = template;
         }
 
-        async function processMultipleFiles(files) {
-            hideError();
+        function copyFullText() {
+            const textArea = document.getElementById('previewText');
+            executeCopy(textArea.value, "Seluruh teks berhasil disalin!");
+        }
+
+        function copyGroomName() {
+            const pNama = document.getElementById('pNama').value.trim();
+            executeCopy(pNama, "Nama Mempelai Pria berhasil disalin!");
+        }
+
+        function copyBrideName() {
+            const wNama = document.getElementById('wNama').value.trim();
+            executeCopy(wNama, "Nama Mempelai Wanita berhasil disalin!");
+        }
+
+        function copyAddress() {
+            const tempat = document.getElementById('tempat').value.trim();
+            const alamat = document.getElementById('alamat').value.trim();
+            const addressText = `Bertempat di\n${tempat}\n${alamat}`;
+            executeCopy(addressText, "Lokasi & Alamat berhasil disalin!");
+        }
+
+        function copyHostName() {
+            const hormat = document.getElementById('hormat').value.trim();
+            executeCopy(hormat, "Nama yang mengundang berhasil disalin!");
+        }
+
+        // Helper untuk parse tanggal
+        function parseDateString(dateStr) {
+            // Menghilangkan tanda koma untuk memudahkan pemisahan kata
+            const cleanStr = dateStr.replace(/,/g, '').trim();
+            const parts = cleanStr.split(/\s+/);
+            let tgl = dateStr, bln = dateStr, thn = dateStr; // fallback jika format tidak standar
             
-            const validFiles = Array.from(files).filter(file => file.type === 'application/pdf');
-            
-            if (validFiles.length === 0) {
-                showError('Tidak ada file PDF yang valid. Harap unggah file dengan format .pdf');
+            // Asumsi format umum: "Hari Tanggal Bulan Tahun" atau "Tanggal Bulan Tahun"
+            if (parts.length >= 3) {
+                thn = parts[parts.length - 1]; // Kata terakhir
+                bln = parts[parts.length - 2]; // Kata kedua dari akhir
+                tgl = parts[parts.length - 3]; // Kata ketiga dari akhir
+            }
+            return { tgl, bln, thn };
+        }
+
+        function copyTime() {
+            const jam = document.getElementById('jamAkad').value.trim();
+            // Menambahkan kata Pukul otomatis jika pengguna belum mengetikkannya
+            let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
+            executeCopy(textToCopy, "Waktu akad berhasil disalin!");
+        }
+
+        function copyDate() {
+            const dateStr = document.getElementById('tanggal').value.trim();
+            const { tgl } = parseDateString(dateStr);
+            executeCopy(tgl, "Tanggal berhasil disalin!");
+        }
+
+        function copyMonth() {
+            const dateStr = document.getElementById('tanggal').value.trim();
+            const { bln } = parseDateString(dateStr);
+            executeCopy(bln, "Bulan berhasil disalin!");
+        }
+
+        function copyYear() {
+            const dateStr = document.getElementById('tanggal').value.trim();
+            const { thn } = parseDateString(dateStr);
+            executeCopy(thn, "Tahun berhasil disalin!");
+        }
+
+        // Core copy functionality
+        function executeCopy(textToCopy, successMsg) {
+            if (!textToCopy) {
+                console.warn("Tidak ada teks untuk disalin.");
                 return;
             }
 
-            uploadSection.classList.add('hidden');
-            progressSection.classList.remove('hidden');
+            // Using document.execCommand as navigator.clipboard is restricted in iframes
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = textToCopy;
             
-            let overallStats = {
-                bw: 0,
-                light: 0,
-                heavy: 0,
-                totalFiles: validFiles.length
-            };
-            
-            let fileDetails = [];
+            // Prevent scrolling to bottom when appending the textarea
+            tempTextArea.style.top = "0";
+            tempTextArea.style.left = "0";
+            tempTextArea.style.position = "fixed";
+            tempTextArea.style.opacity = "0";
 
-            // Reset Overall Progress
-            overallProgressBar.style.width = '0%';
-            overallProgressText.textContent = `Memproses File 1 dari ${validFiles.length}`;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.focus();
+            tempTextArea.select();
 
-            for (let fIndex = 0; fIndex < validFiles.length; fIndex++) {
-                const file = validFiles[fIndex];
-                
-                // Update Overall Progress UI
-                overallProgressText.textContent = `Memproses File ${fIndex + 1} dari ${validFiles.length}: ${file.name}`;
-                overallProgressBar.style.width = `${(fIndex / validFiles.length) * 100}%`;
-                
-                // Reset Current File Progress
-                progressBar.style.width = '0%';
-                progressText.textContent = `Memuat file...`;
-                progressPercentage.textContent = '0%';
-
-                let fileStats = {
-                    name: file.name,
-                    total: 0,
-                    bw: 0,
-                    light: 0,
-                    heavy: 0,
-                    error: false
-                };
-
-                try {
-                    const arrayBuffer = await file.arrayBuffer();
-                    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                    const totalPages = pdf.numPages;
-                    fileStats.total = totalPages;
-
-                    for (let i = 1; i <= totalPages; i++) {
-                        // Update UI Progress for current file
-                        const percent = Math.round((i / totalPages) * 100);
-                        progressBar.style.width = `${percent}%`;
-                        progressText.textContent = `Menganalisis halaman ${i} dari ${totalPages}`;
-                        progressPercentage.textContent = `${percent}%`;
-
-                        // Prevent UI freeze by yielding to the main thread
-                        await new Promise(resolve => setTimeout(resolve, 15));
-
-                        const pageData = await analyzePage(pdf, i);
-
-                        if (pageData.category === 'bw') {
-                            fileStats.bw++;
-                            overallStats.bw++;
-                        } else if (pageData.category === 'light') {
-                            fileStats.light++;
-                            overallStats.light++;
-                        } else {
-                            fileStats.heavy++;
-                            overallStats.heavy++;
-                        }
-                    }
-                } catch (err) {
-                    console.error(`Error processing file ${file.name}:`, err);
-                    fileStats.error = true;
-                }
-                
-                fileDetails.push(fileStats);
-                
-                // Complete overall progress bar at the end
-                overallProgressBar.style.width = `${((fIndex + 1) / validFiles.length) * 100}%`;
-            }
-
-            showResults(overallStats, fileDetails);
-        }
-
-        async function analyzePage(pdf, pageNumber) {
-            const page = await pdf.getPage(pageNumber);
-            const viewport = page.getViewport({ scale: RENDER_SCALE });
-            
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-
-            ctx.fillStyle = '#ffffff';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            const renderContext = {
-                canvasContext: ctx,
-                viewport: viewport
-            };
-
-            await page.render(renderContext).promise;
-
-            const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imgData.data;
-            const totalPixels = canvas.width * canvas.height;
-            let coloredPixels = 0;
-
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
-                
-                const max = Math.max(r, g, b);
-                const min = Math.min(r, g, b);
-
-                if (max - min > COLOR_THRESHOLD) {
-                    coloredPixels++;
-                }
-            }
-
-            const colorPercentage = (coloredPixels / totalPixels) * 100;
-            let category = 'bw';
-
-            if (colorPercentage <= NOISE_TOLERANCE) {
-                category = 'bw';
-            } else if (colorPercentage <= 50) {
-                category = 'light';
-            } else {
-                category = 'heavy';
-            }
-
-            return { category: category };
-        }
-
-        function showResults(overallStats, fileDetails) {
-            progressSection.classList.add('hidden');
-            resultsSection.classList.remove('hidden');
-
-            // Set Summary Counts
-            if(countBwEl) countBwEl.textContent = overallStats.bw;
-            if(countLightEl) countLightEl.textContent = overallStats.light;
-            if(countHeavyEl) countHeavyEl.textContent = overallStats.heavy;
-
-            // Populate Table
-            detailsTableBody.innerHTML = '';
-            fileDetails.forEach(detail => {
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-50 transition-colors duration-150';
-                
-                if (detail.error) {
-                    tr.innerHTML = `
-                        <td class="px-5 py-4 font-medium text-slate-700">
-                            <div class="flex items-center">
-                                <i class="fa-solid fa-file-circle-xmark text-red-400 mr-3 text-lg"></i> 
-                                <span class="truncate max-w-[150px] sm:max-w-[200px]" title="${detail.name}">${detail.name}</span>
-                            </div>
-                        </td>
-                        <td colspan="4" class="px-5 py-4 text-red-500 text-center italic">Gagal memproses file ini</td>
-                    `;
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showToast(successMsg);
                 } else {
-                    tr.innerHTML = `
-                        <td class="px-5 py-4 font-medium text-slate-700">
-                            <div class="flex items-center">
-                                <i class="fa-regular fa-file-pdf text-red-500 mr-3 text-lg"></i> 
-                                <span class="truncate max-w-[150px] sm:max-w-[200px]" title="${detail.name}">${detail.name}</span>
-                            </div>
-                        </td>
-                        <td class="px-5 py-4 text-center font-semibold text-slate-700">${detail.total}</td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-slate-100 text-slate-600 font-semibold text-xs border border-slate-200">${detail.bw}</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 font-semibold text-xs border border-blue-100">${detail.light}</span>
-                        </td>
-                        <td class="px-5 py-4 text-center">
-                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-purple-50 text-purple-600 font-semibold text-xs border border-purple-100">${detail.heavy}</span>
-                        </td>
-                    `;
+                    console.error('Gagal menyalin teks (execCommand returned false).');
                 }
-                detailsTableBody.appendChild(tr);
-            });
+            } catch (err) {
+                console.error('Oops, tidak dapat menyalin', err);
+            }
+            
+            document.body.removeChild(tempTextArea);
+        }
+
+        // Toast animation logic
+        let toastTimeout;
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            // Set custom message
+            if (message) {
+                toastMsg.textContent = message;
+            }
+
+            // Clear existing timeout if rapidly clicked
+            if (toastTimeout) {
+                clearTimeout(toastTimeout);
+            }
+
+            // Show toast
+            toast.classList.remove('toast-exit');
+            toast.classList.add('toast-enter');
+
+            // Hide after 3 seconds
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+            }, 3000);
         }
     </script>
 </body>
