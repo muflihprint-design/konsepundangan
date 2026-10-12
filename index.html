@@ -284,8 +284,12 @@
                             Salin Waktu Resepsi
                         </button>
 
+                        <button onclick="copyFullDate()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Hari & Tanggal
+                        </button>
+
                         <button onclick="copyDate()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
-                            Salin Tanggal
+                            Salin Tanggal (Angka)
                         </button>
 
                         <button onclick="copyMonth()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
@@ -670,6 +674,11 @@ Kedua Mempelai`;
             // Menambahkan kata Pukul otomatis jika pengguna belum mengetikkannya
             let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
             executeCopy(textToCopy, "Waktu resepsi berhasil disalin!");
+        }
+
+        function copyFullDate() {
+            const dateStr = document.getElementById('tanggal').value.trim();
+            executeCopy(dateStr, "Hari dan Tanggal lengkap berhasil disalin!");
         }
 
         function copyDate() {
