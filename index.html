@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Teks Undangan Pernikahan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -130,6 +131,18 @@
         <div class="w-full lg:w-1/2 space-y-2">
             <p class="text-sm text-gray-400 mb-6">Lengkapi data di bawah ini. Teks akan otomatis terbuat di panel sebelah kanan.</p>
             
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button onclick="downloadTemplate()" class="bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2 px-4 rounded-lg text-sm transition-all shadow-lg flex items-center gap-2 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Blangko Excel
+                </button>
+                <label class="bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2 px-4 rounded-lg text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Import dari Excel
+                    <input type="file" id="excelUpload" accept=".xlsx, .xls" class="hidden" onchange="handleExcelFile(event)">
+                </label>
+            </div>
+
             <form id="invitationForm" onsubmit="event.preventDefault();">
                 <!-- Susunan Nama -->
                 <fieldset>
@@ -263,8 +276,12 @@
                             Salin Pengundang
                         </button>
 
-                        <button onclick="copyTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
-                            Salin Waktu
+                        <button onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Waktu Akad
+                        </button>
+
+                        <button onclick="copyResepsiTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
+                            Salin Waktu Resepsi
                         </button>
 
                         <button onclick="copyDate()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs md:text-sm active:scale-[0.98]">
@@ -284,12 +301,185 @@
         </div>
     </main>
 
+    <!-- Custom Alert Modal untuk pesan error/info (Menggantikan fungsi alert() bawaan browser) -->
+    <div id="customAlertModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div class="bg-dark-800 border border-gold-500/30 rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl transform transition-all">
+            <h3 class="text-gold-500 font-serif text-xl mb-2 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Pemberitahuan
+            </h3>
+            <p id="customAlertMessage" class="text-gray-300 text-sm mb-6 leading-relaxed"></p>
+            <button onclick="closeCustomAlert()" class="w-full bg-gold-600 hover:bg-gold-500 text-black font-semibold py-2.5 px-4 rounded-lg transition-colors">
+                Mengerti
+            </button>
+        </div>
+    </div>
+
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 z-50 pointer-events-none">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
     </div>
 
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none">
+        <div id="modalContent" class="bg-dark-800 border border-gold-500/30 p-6 rounded-xl shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300">
+            <h3 class="text-gold-500 font-serif text-xl mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                Pemberitahuan
+            </h3>
+            <p id="modalMessage" class="text-gray-300 text-sm mb-6 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2 rounded-lg transition-all shadow-lg active:scale-95">Mengerti</button>
+        </div>
+    </div>
+
     <script>
+        function showModal(message) {
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('modalContent');
+            const msgEl = document.getElementById('modalMessage');
+            
+            msgEl.textContent = message;
+            modal.classList.remove('hidden');
+            
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('customModal');
+            const modalContent = document.getElementById('modalContent');
+            
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function downloadTemplate() {
+            try {
+                // Format Vertikal: Kolom A untuk Field, Kolom B untuk Value
+                const ws_data = [
+                    ["Field Data", "Isian (Ubah baris di kolom ini)"],
+                    ["Susunan Nama (wanita/pria)", "wanita"],
+                    ["Wanita - Nama Lengkap", "Rezky Hulwani, S.Kes"],
+                    ["Wanita - Anak Ke-", "-"],
+                    ["Wanita - Nama Bapak", "-"],
+                    ["Wanita - Nama Ibu", "-"],
+                    ["Pria - Nama Lengkap", "Muh. Danang Kiwalo Ikhsan"],
+                    ["Pria - Anak Ke-", "-"],
+                    ["Pria - Nama Bapak", "-"],
+                    ["Pria - Nama Ibu", "-"],
+                    ["Hari dan Tanggal Acara", "Minggu, 08 November 2026"],
+                    ["Waktu Akad", "10.00 Wita"],
+                    ["Waktu Resepsi", "11.00 WITA - Selesai"],
+                    ["Nama Tempat/Gedung", "Gedung Balai Mutiara"],
+                    ["Alamat Lengkap", "Jl. Nikel Raya, Balla Parang, Kec. Rappocini, Kota Makassar"],
+                    ["Hormat Kami (Tuan Rumah)", "Bpk. Samsul & Ny Ruth"]
+                ];
+
+                const ws = XLSX.utils.aoa_to_sheet(ws_data);
+                
+                // Lebarkan kolom supaya isi teks tidak terpotong
+                ws['!cols'] = [{ wch: 35 }, { wch: 60 }];
+
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data Undangan");
+                
+                XLSX.writeFile(wb, "Blangko_Data_Undangan.xlsx");
+                showToast("Blangko Excel berhasil diunduh!");
+            } catch (error) {
+                showModal("Gagal membuat file Excel. Pastikan koneksi internet stabil untuk memuat library.");
+            }
+        }
+
+        function handleExcelFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                    
+                    if (rows.length < 2) {
+                        showModal("File Excel tampaknya kosong atau tidak sesuai format.");
+                        return;
+                    }
+
+                    // Mapping Kolom A (teks tepatnya) ke ID elemen HTML
+                    const fieldMap = {
+                        "Susunan Nama (wanita/pria)": "susunan",
+                        "Wanita - Nama Lengkap": "wNama",
+                        "Wanita - Anak Ke-": "wAnak",
+                        "Wanita - Nama Bapak": "wBapak",
+                        "Wanita - Nama Ibu": "wIbu",
+                        "Pria - Nama Lengkap": "pNama",
+                        "Pria - Anak Ke-": "pAnak",
+                        "Pria - Nama Bapak": "pBapak",
+                        "Pria - Nama Ibu": "pIbu",
+                        "Hari dan Tanggal Acara": "tanggal",
+                        "Waktu Akad": "jamAkad",
+                        "Waktu Resepsi": "jamResepsi",
+                        "Nama Tempat/Gedung": "tempat",
+                        "Alamat Lengkap": "alamat",
+                        "Hormat Kami (Tuan Rumah)": "hormat"
+                    };
+
+                    let importCount = 0;
+
+                    for (let i = 1; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (row && row.length >= 2) {
+                            const fieldName = row[0];
+                            const value = row[1];
+                            
+                            const targetId = fieldMap[fieldName];
+                            if (targetId && value !== undefined) {
+                                const inputEl = document.getElementById(targetId);
+                                if (inputEl) {
+                                    if (targetId === "susunan") {
+                                        const valLower = String(value).toLowerCase().trim();
+                                        if (valLower === "wanita" || valLower === "pria") {
+                                            inputEl.value = valLower;
+                                        }
+                                    } else {
+                                        inputEl.value = value;
+                                    }
+                                    importCount++;
+                                }
+                            }
+                        }
+                    }
+
+                    if (importCount > 0) {
+                        generateText();
+                        showToast(`Berhasil mengimpor ${importCount} data!`);
+                    } else {
+                        showModal("Tidak ada data yang cocok. Pastikan menggunakan Blangko yang benar.");
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    showModal("Terjadi kesalahan saat membaca file Excel.");
+                }
+                
+                event.target.value = "";
+            };
+            
+            reader.readAsArrayBuffer(file);
+        }
+
         // Setup event listeners for auto-generation
         document.addEventListener('DOMContentLoaded', () => {
             const inputs = document.querySelectorAll('input, select, textarea');
@@ -468,11 +658,18 @@ Kedua Mempelai`;
             return { tgl, bln, thn };
         }
 
-        function copyTime() {
+        function copyAkadTime() {
             const jam = document.getElementById('jamAkad').value.trim();
             // Menambahkan kata Pukul otomatis jika pengguna belum mengetikkannya
             let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
             executeCopy(textToCopy, "Waktu akad berhasil disalin!");
+        }
+
+        function copyResepsiTime() {
+            const jam = document.getElementById('jamResepsi').value.trim();
+            // Menambahkan kata Pukul otomatis jika pengguna belum mengetikkannya
+            let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
+            executeCopy(textToCopy, "Waktu resepsi berhasil disalin!");
         }
 
         function copyDate() {
@@ -553,6 +750,129 @@ Kedua Mempelai`;
                 toast.classList.remove('toast-enter');
                 toast.classList.add('toast-exit');
             }, 3000);
+        }
+
+        // --- Custom Alert Logic ---
+        function customAlert(message) {
+            const modal = document.getElementById('customAlertModal');
+            document.getElementById('customAlertMessage').textContent = message;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCustomAlert() {
+            const modal = document.getElementById('customAlertModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // --- Fitur Excel Import & Download ---
+        function downloadTemplate() {
+            if (typeof XLSX === 'undefined') {
+                customAlert("Sistem sedang memuat modul Excel, mohon tunggu beberapa detik dan coba lagi.");
+                return;
+            }
+
+            const ws_name = "Data Undangan";
+            // Header baris pertama, contoh data default di baris kedua
+            const ws_data = [
+                ["Susunan (wanita/pria)", "Nama Lengkap Wanita", "Anak ke (W)", "Nama Bapak (W)", "Nama Ibu (W)", "Nama Lengkap Pria", "Anak ke (P)", "Nama Bapak (P)", "Nama Ibu (P)", "Hari dan Tanggal Acara", "Pukul Akad", "Pukul Resepsi", "Nama Tempat / Gedung", "Alamat Lengkap", "Hormat Kami (Tuan Rumah)"],
+                ["wanita", "Rezky Hulwani, S.Kes", "-", "-", "-", "Muh. Danang Kiwalo Ikhsan", "-", "-", "-", "Minggu, 08 November 2026", "10.00 Wita", "11.00 WITA - Selesai", "Gedung Balai Mutiara", "Jl. Nikel Raya, Balla Parang, Kec. Rappocini, Kota Makassar", "Bpk. Samsul & Ny Ruth"] 
+            ];
+            const ws = XLSX.utils.aoa_to_sheet(ws_data);
+            
+            // Mengatur lebar setiap kolom secara otomatis saat dibuka di Excel
+            const wscols = [
+                {wch:20}, {wch:25}, {wch:12}, {wch:20}, {wch:20}, 
+                {wch:30}, {wch:12}, {wch:20}, {wch:20}, 
+                {wch:30}, {wch:15}, {wch:25}, {wch:30}, {wch:50}, {wch:30}
+            ];
+            ws['!cols'] = wscols;
+
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, ws_name);
+            XLSX.writeFile(wb, "Blangko_Data_Undangan.xlsx");
+            showToast("Blangko Excel berhasil diunduh!");
+        }
+
+        function handleExcelUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (typeof XLSX === 'undefined') {
+                customAlert("Modul Excel belum termuat atau diblokir. Periksa koneksi internet Anda.");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {type: 'array'});
+                    
+                    // Mengambil sheet (halaman excel) pertama
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    
+                    // Mengonversi isi sheet ke dalam bentuk Array 2 Dimensi
+                    const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                    
+                    if (rows.length > 1) {
+                        const rowData = rows[1]; // Mengambil baris kedua (Baris pertama adalah judul kolom)
+                        
+                        // Fungsi pembantu (helper) untuk mengisi input dengan aman
+                        const setVal = (id, idx) => { 
+                            if(rowData[idx] !== undefined && rowData[idx] !== null) {
+                                document.getElementById(id).value = rowData[idx].toString(); 
+                            } else {
+                                document.getElementById(id).value = ""; // Kosongkan jika cell kosong
+                            }
+                        };
+
+                        // [0] Susunan Posisi
+                        if(rowData[0]) {
+                            const susunanVal = rowData[0].toString().toLowerCase();
+                            if(susunanVal.includes("pria")) {
+                                document.getElementById('susunan').value = "pria";
+                            } else {
+                                document.getElementById('susunan').value = "wanita";
+                            }
+                        }
+                        
+                        // Mapping data baris ke-2 berdasar urutan indeks kolom
+                        setVal('wNama', 1);
+                        setVal('wAnak', 2);
+                        setVal('wBapak', 3);
+                        setVal('wIbu', 4);
+                        
+                        setVal('pNama', 5);
+                        setVal('pAnak', 6);
+                        setVal('pBapak', 7);
+                        setVal('pIbu', 8);
+                        
+                        setVal('tanggal', 9);
+                        setVal('jamAkad', 10);
+                        setVal('jamResepsi', 11);
+                        setVal('tempat', 12);
+                        setVal('alamat', 13);
+                        setVal('hormat', 14);
+
+                        // Memperbarui tampilan preview otomatis setelah import
+                        generateText();
+                        showToast("Data dari Excel berhasil diimpor!");
+                    } else {
+                        customAlert("File Excel kosong atau tidak terdapat data yang valid pada baris kedua.");
+                    }
+                } catch (error) {
+                    console.error("Kesalahan membaca excel:", error);
+                    customAlert("Gagal memproses file Excel. Pastikan format tabel di dalam file sesuai dengan Blangko.");
+                }
+            };
+            
+            reader.readAsArrayBuffer(file);
+            
+            // Me-reset nilai input agar kita bisa mengunggah file yang sama lagi bila perlu diperbarui
+            event.target.value = ''; 
         }
     </script>
 </body>
