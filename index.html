@@ -198,14 +198,14 @@
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wBapak">Nama Bapak</label>
-                                <input type="text" id="wBapak" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
+                                <input type="text" id="wBapak" class="input-field" value="" placeholder="">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wIbu">Nama Ibu</label>
-                                <input type="text" id="wIbu" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
+                                <input type="text" id="wIbu" class="input-field" value="" placeholder="">
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua disembunyikan jika kolom Anak, Bapak, & Ibu dikosongkan.</p>
+                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Kosongkan jika tidak perlu.</p>
                     </fieldset>
 
                     <fieldset id="fieldsetPria" class="order-2 transition-all duration-300">
@@ -641,11 +641,21 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             });
         });
 
-        function angkaKeUrutan(angkaStr) {
-            const angka = parseInt(angkaStr);
-            if (isNaN(angka)) return angkaStr;
-            const urutan = {1: 'pertama', 2: 'kedua', 3: 'ketiga', 4: 'keempat', 5: 'kelima', 6: 'keenam', 7: 'ketujuh', 8: 'kedelapan', 9: 'kesembilan', 10: 'kesepuluh'};
-            return urutan[angka] || "ke-" + angkaStr;
+        function angkaKeUrutan(inputStr) {
+            // Hapus semua spasi dari input untuk keperluan pengecekan angka
+            const strTanpaSpasi = inputStr.replace(/\s+/g, '');
+            
+            // Cek apakah setelah spasi dihapus, input adalah murni angka
+            if (/^\d+$/.test(strTanpaSpasi)) {
+                const angka = parseInt(strTanpaSpasi);
+                const urutan = {1: 'pertama', 2: 'kedua', 3: 'ketiga', 4: 'keempat', 5: 'kelima', 6: 'keenam', 7: 'ketujuh', 8: 'kedelapan', 9: 'kesembilan', 10: 'kesepuluh'};
+                // Jika angka ada di kamus urutan, kembalikan teksnya, jika tidak kembalikan "ke-" + angka
+                return urutan[angka] || "ke-" + strTanpaSpasi;
+            } else {
+                // Jika input berupa teks (bukan hanya angka), kembalikan teks aslinya
+                // Hapus spasi di awal/akhir dengan .trim() dan ubah ke huruf kecil semua dengan .toLowerCase()
+                return inputStr.trim().toLowerCase();
+            }
         }
 
         function copyBrideParent() {
