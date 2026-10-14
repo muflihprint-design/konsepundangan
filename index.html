@@ -38,9 +38,10 @@
         body {
             background-color: #0f0f11;
             color: #f3f4f6;
+            scroll-behavior: smooth;
         }
         
-        /* Custom Scrollbar for elegant look */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -91,17 +92,28 @@
         fieldset {
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 0.5rem;
-            padding: 1.5rem;
+            padding: 1rem;
             margin-bottom: 1.5rem;
             background-color: #1a1a1e;
+        }
+        @media (min-width: 768px) {
+            fieldset {
+                padding: 1.5rem; 
+            }
         }
 
         legend {
             font-family: "Playfair Display", serif;
             color: #d4af37;
-            padding: 0 0.75rem;
-            font-size: 1.25rem;
+            padding: 0 0.5rem;
+            font-size: 1.1rem;
             font-style: italic;
+        }
+        @media (min-width: 768px) {
+            legend {
+                font-size: 1.25rem;
+                padding: 0 0.75rem;
+            }
         }
 
         .toast-enter {
@@ -114,56 +126,57 @@
         }
     </style>
 </head>
-<body class="min-h-screen relative pb-12 lg:pb-0">
+<body class="min-h-screen relative pb-24 lg:pb-8">
 
-    <header class="bg-dark-800 border-b border-gold-500/20 py-6 sticky top-0 z-20 shadow-lg">
+    <header class="bg-dark-800 border-b border-gold-500/20 py-5 md:py-6 sticky top-0 z-20 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
             <div>
-                <h1 class="text-2xl md:text-3xl font-serif text-gold-500">Royal Invitation Text</h1>
-                <p class="text-xs md:text-sm text-gray-400 mt-1">Generator Format Pesan WhatsApp Pernikahan</p>
+                <h1 class="text-xl md:text-3xl font-serif text-gold-500">Royal Invitation Text</h1>
+                <p class="text-[10px] md:text-sm text-gray-400 mt-1">Generator Format Pesan WhatsApp Pernikahan</p>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 flex flex-col lg:flex-row gap-8">
+    <main class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8">
         
-        <!-- Left Column: Form Inputs -->
-        <div class="w-full lg:w-1/2 space-y-2">
-            <p class="text-sm text-gray-400 mb-6">Lengkapi data di bawah ini. Teks akan otomatis terbuat di panel sebelah kanan.</p>
+        <!-- ================= KIRI: FORM PENGISIAN ================= -->
+        <div id="formSection" class="w-full lg:w-1/2 space-y-2 relative">
+            <p class="text-xs md:text-sm text-gray-400 mb-4 md:mb-6 leading-relaxed">
+                <span class="font-semibold text-gold-300">Auto-Save Aktif:</span> Data Anda akan otomatis tersimpan walau halaman dimuat ulang.
+            </p>
             
-            <div class="flex flex-wrap gap-3 mb-6">
-                <button onclick="downloadTemplate()" class="bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2 px-4 rounded-lg text-sm transition-all shadow-lg flex items-center gap-2 active:scale-95">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-6">
+                <button onclick="downloadTemplate()" class="w-full bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Download Blangko Excel
+                    Blangko Kosong
                 </button>
-                <label class="bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2 px-4 rounded-lg text-sm transition-all shadow-lg flex items-center gap-2 cursor-pointer active:scale-95">
+                <label class="w-full bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Import dari Excel
+                    Import Data
                     <input type="file" id="excelUpload" accept=".xlsx, .xls" class="hidden" onchange="handleExcelFile(event)">
                 </label>
+                <button onclick="exportToExcel()" class="w-full bg-purple-700/80 hover:bg-purple-600 text-white border border-purple-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                    Simpan (Excel)
+                </button>
             </div>
 
             <form id="invitationForm" onsubmit="event.preventDefault();">
-                <!-- Susunan Nama -->
                 <fieldset>
                     <legend>Pengaturan Posisi</legend>
-                    <div class="input-group">
+                    <div class="input-group mb-0">
                         <label class="input-label" for="susunan">Susunan Nama Lebih Dulu</label>
-                        <!-- Tambahkan event onchange di sini -->
-                        <select id="susunan" class="input-field cursor-pointer" onchange="aturPosisiForm()">
+                        <select id="susunan" class="input-field cursor-pointer" onchange="aturPosisiForm(); saveToLocalStorage();">
                             <option value="wanita">Wanita Dulu (Mempelai Wanita di Atas)</option>
                             <option value="pria">Pria Dulu (Mempelai Pria di Atas)</option>
                         </select>
                     </div>
                 </fieldset>
 
-                <!-- Bungkus kedua form mempelai dengan div Flexbox -->
                 <div id="mempelaiContainer" class="flex flex-col">
-                    
-                    <!-- Fieldset Wanita diberi ID dan urutan awal (order-1) -->
                     <fieldset id="fieldsetWanita" class="order-1 transition-all duration-300">
                         <legend>Mempelai Wanita</legend>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                             <div class="input-group">
                                 <label class="input-label" for="wNama">Nama Lengkap & Gelar</label>
                                 <input type="text" id="wNama" class="input-field" value="" placeholder="Contoh: Rezky Hulwani, S.Kes">
@@ -173,27 +186,26 @@
                                 <input type="text" id="wPanggilan" class="input-field" value="" placeholder="Contoh: Rezky">
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-1 md:mt-0">
                             <div class="input-group">
                                 <label class="input-label" for="wAnak">Anak Ke-</label>
                                 <input type="text" id="wAnak" class="input-field" value="" placeholder="Contoh: 1, 2, atau -">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wBapak">Nama Bapak</label>
-                                <input type="text" id="wBapak" class="input-field" value="" placeholder="Isi '-' jika ingin disembunyikan">
+                                <input type="text" id="wBapak" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wIbu">Nama Ibu</label>
-                                <input type="text" id="wIbu" class="input-field" value="" placeholder="Isi '-' jika ingin disembunyikan">
+                                <input type="text" id="wIbu" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua akan disembunyikan jika kolom Anak, Bapak, & Ibu diisi tanda strip (-).</p>
+                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua disembunyikan jika kolom Anak, Bapak, & Ibu diisi (-).</p>
                     </fieldset>
 
-                    <!-- Fieldset Pria diberi ID dan urutan awal (order-2) -->
                     <fieldset id="fieldsetPria" class="order-2 transition-all duration-300">
                         <legend>Mempelai Pria</legend>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                             <div class="input-group">
                                 <label class="input-label" for="pNama">Nama Lengkap & Gelar</label>
                                 <input type="text" id="pNama" class="input-field" value="" placeholder="Contoh: Muh. Danang Kiwalo Ikhsan">
@@ -203,30 +215,28 @@
                                 <input type="text" id="pPanggilan" class="input-field" value="" placeholder="Contoh: Danang">
                             </div>
                         </div>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-1 md:mt-0">
                             <div class="input-group">
                                 <label class="input-label" for="pAnak">Anak Ke-</label>
                                 <input type="text" id="pAnak" class="input-field" value="" placeholder="Contoh: 1, 2, atau -">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="pBapak">Nama Bapak</label>
-                                <input type="text" id="pBapak" class="input-field" value="" placeholder="Isi '-' jika ingin disembunyikan">
+                                <input type="text" id="pBapak" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="pIbu">Nama Ibu</label>
-                                <input type="text" id="pIbu" class="input-field" value="" placeholder="Isi '-' jika ingin disembunyikan">
+                                <input type="text" id="pIbu" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
                             </div>
                         </div>
                     </fieldset>
-                    
                 </div>
 
                 <fieldset>
                     <legend>Waktu & Tempat Acara</legend>
 
-                    <!-- Seksi Akad Nikah -->
-                    <div class="mb-2 text-gold-500 font-serif border-b border-gold-500/20 pb-1">Akad Nikah</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Akad Nikah</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         <div class="input-group">
                             <label class="input-label" for="tanggalAkad">Hari & Tanggal Akad</label>
                             <input type="text" id="tanggalAkad" class="input-field" value="" placeholder="Contoh: Minggu, 08 November 2026">
@@ -240,14 +250,13 @@
                         <label class="input-label" for="tempatAkad">Nama Tempat / Gedung Akad</label>
                         <input type="text" id="tempatAkad" class="input-field" value="" placeholder="Contoh: Masjid Raya">
                     </div>
-                    <div class="input-group mb-4">
+                    <div class="input-group mb-5">
                         <label class="input-label" for="alamatAkad">Alamat Lengkap Akad</label>
                         <textarea id="alamatAkad" rows="2" class="input-field resize-none" placeholder="Contoh: Jl. Masjid Raya, Bontoala, Kota Makassar"></textarea>
                     </div>
 
-                    <!-- Seksi Resepsi -->
-                    <div class="mt-4 mb-2 text-gold-500 font-serif border-b border-gold-500/20 pb-1">Resepsi</div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="mt-2 mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Resepsi</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         <div class="input-group">
                             <label class="input-label" for="tanggalResepsi">Hari & Tanggal Resepsi</label>
                             <input type="text" id="tanggalResepsi" class="input-field" value="" placeholder="Contoh: Minggu, 08 November 2026">
@@ -261,15 +270,19 @@
                         <label class="input-label" for="tempatResepsi">Nama Tempat / Gedung Resepsi</label>
                         <input type="text" id="tempatResepsi" class="input-field" value="" placeholder="Contoh: Gedung Balai Mutiara">
                     </div>
-                    <div class="input-group mb-0">
+                    <div class="input-group mb-4">
                         <label class="input-label" for="alamatResepsi">Alamat Lengkap Resepsi</label>
                         <textarea id="alamatResepsi" rows="2" class="input-field resize-none" placeholder="Contoh: Jl. Nikel Raya, Balla Parang, Kec. Rappocini, Kota Makassar"></textarea>
+                    </div>
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="keteranganResepsi">Keterangan Tambahan Resepsi</label>
+                        <textarea id="keteranganResepsi" rows="2" class="input-field resize-none" placeholder="Contoh: Hiburan: Tarian Adat / Pakaian: Bebas Rapi"></textarea>
                     </div>
                 </fieldset>
 
                 <fieldset>
                     <legend>Turut Mengundang</legend>
-                    <p class="text-[10px] text-gray-500 italic mb-2">Pisahkan nama dengan menekan tombol Enter (baris baru). Otomatis diformat bersusun ke bawah dengan awalan bintang (*).</p>
+                    <p class="text-[10px] md:text-xs text-gray-500 italic mb-2">Pisahkan nama dengan menekan tombol Enter (baris baru). Otomatis diformat bersusun ke bawah dengan awalan bintang (*).</p>
                     <div class="input-group mb-0">
                         <textarea id="turutMengundang" rows="4" class="input-field resize-none" placeholder="Bpk. Ahmad&#10;Ibu Fatimah&#10;Keluarga Besar H. Hasan"></textarea>
                     </div>
@@ -285,105 +298,95 @@
             </form>
         </div>
 
-        <div class="w-full lg:w-1/2">
-            <div class="sticky top-28 bg-dark-800 p-1 rounded-xl border border-gold-500/30 shadow-2xl">
-                <div class="bg-dark-900 rounded-lg p-4 md:p-6 h-[75vh] md:h-[85vh] flex flex-col relative overflow-y-auto">
-                    
+        <!-- ================= KANAN: PREVIEW & TOMBOL SALIN (Dipisah) ================= -->
+        <div class="w-full lg:w-1/2 mt-4 lg:mt-0 flex flex-col gap-6 lg:gap-8">
+            
+            <!-- BLOK 1: Kotak Live Preview Teks -->
+            <div id="previewBox" class="bg-dark-800 p-1 md:p-1.5 rounded-xl border border-gold-500/30 shadow-2xl">
+                <div class="bg-dark-900 rounded-lg p-4 md:p-6 flex flex-col relative">
                     <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-gold-500 font-serif text-xl flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <h2 class="text-gold-500 font-serif text-lg md:text-xl flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                             Live Preview Teks
                         </h2>
                     </div>
 
-                    <!-- The Textarea for the generated text -->
+                    <!-- Textarea sekarang sangat lega ke bawah -->
                     <textarea id="previewText" readonly 
-                        class="w-full flex-grow bg-transparent text-gray-200 font-mono text-sm resize-none focus:outline-none custom-scrollbar leading-relaxed"
-                        style="scrollbar-width: thin; scrollbar-color: #d4af37 transparent; min-height: 200px;"></textarea>
+                        class="w-full bg-transparent text-gray-200 font-mono text-xs md:text-sm resize-none focus:outline-none custom-scrollbar leading-relaxed h-[65vh] md:h-[80vh]"
+                        style="scrollbar-width: thin; scrollbar-color: #d4af37 transparent;"></textarea>
+                </div>
+            </div>
 
-                    <!-- Copy Buttons Container -->
-                    <div class="mt-4 flex flex-col gap-2 md:gap-3">
-                        <button onclick="copyFullText()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                            Salin Semua Teks
-                        </button>
+            <!-- BLOK 2: Kotak Tombol Salin -->
+            <div id="copySection" class="bg-dark-800 p-4 md:p-6 rounded-xl border border-gold-500/30 shadow-2xl">
+                <h2 class="text-gold-500 font-serif text-lg md:text-xl flex items-center gap-2 mb-4 border-b border-gold-500/20 pb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                    Opsi Salin Cepat
+                </h2>
+                
+                <div class="flex flex-col gap-3">
+                    <!-- Tombol Utama -->
+                    <button onclick="copyFullText()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        Salin Semua Teks
+                    </button>
+                    
+                    <div id="copyButtonsContainer" class="flex flex-col gap-2 md:gap-3">
+                        <div id="btnGroupWanita" class="grid grid-cols-2 gap-2 md:gap-3 order-1 transition-all duration-300">
+                            <button onclick="copyBrideName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Wanita</button>
+                            <button onclick="copyBrideParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ortu Wanita</button>
+                        </div>
                         
-                        <!-- Kontainer Flexbox untuk Tombol Mempelai -->
-                        <div id="copyButtonsContainer" class="flex flex-col gap-2 md:gap-3">
-                            <!-- Grup Tombol Wanita (Default order-1) -->
-                            <div id="btnGroupWanita" class="grid grid-cols-2 gap-2 md:gap-3 order-1 transition-all duration-300">
-                                <button onclick="copyBrideName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                    Salin Nama Wanita
-                                </button>
-                                <button onclick="copyBrideParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                    Salin Ortu Wanita
-                                </button>
-                            </div>
-                            
-                            <!-- Grup Tombol Pria (Default order-2) -->
-                            <div id="btnGroupPria" class="grid grid-cols-2 gap-2 md:gap-3 order-2 transition-all duration-300">
-                                <button onclick="copyGroomName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                    Salin Nama Pria
-                                </button>
-                                <button onclick="copyGroomParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                    Salin Ortu Pria
-                                </button>
-                            </div>
+                        <div id="btnGroupPria" class="grid grid-cols-2 gap-2 md:gap-3 order-2 transition-all duration-300">
+                            <button onclick="copyGroomName()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Pria</button>
+                            <button onclick="copyGroomParent()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ortu Pria</button>
                         </div>
+                    </div>
 
-                        <!-- Tombol Lainnya -->
-                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
-                            <button onclick="copyTurutMengundang()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Turut Mengundang
-                            </button>
+                    <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
+                        <button onclick="copyTurutMengundang()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Turut Mengundang</button>
+                        <button onclick="copyTanggalAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Akad (Full)</button>
+                        <button onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Akad</button>
+                        <button onclick="copyAlamatAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Akad</button>
+                        
+                        <button onclick="copyTanggalResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Resepsi (Full)</button>
+                        <button onclick="copyResepsiTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Resepsi</button>
+                        <button onclick="copyAlamatResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Resepsi</button>
+                        <button onclick="copyKeteranganResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Ket. Resepsi</button>
 
-                            <!-- Akad Buttons -->
-                            <button onclick="copyTanggalAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Tgl Akad (Full)
-                            </button>
-                            <button onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Waktu Akad
-                            </button>
-                            <button onclick="copyAlamatAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Lokasi Akad
-                            </button>
-                            
-                            <!-- Resepsi Buttons -->
-                            <button onclick="copyTanggalResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Tgl Resepsi (Full)
-                            </button>
-                            <button onclick="copyResepsiTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Waktu Resepsi
-                            </button>
-                            <button onclick="copyAlamatResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Lokasi Resepsi
-                            </button>
+                        <button onclick="copyResepsiTanggalSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Resepsi (Angka)</button>
+                        <button onclick="copyResepsiBulanSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Bulan Resepsi</button>
+                        <button onclick="copyResepsiTahunSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tahun Resepsi</button>
 
-                            <!-- 3 Tombol Baru: Resepsi Tanggal, Bulan, Tahun -->
-                            <button onclick="copyResepsiTanggalSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Tgl Resepsi (Angka)
-                            </button>
-                            <button onclick="copyResepsiBulanSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Bulan Resepsi
-                            </button>
-                            <button onclick="copyResepsiTahunSaja()" class="bg-dark-700 hover:bg-dark-600 border border-blue-500/30 text-blue-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Tahun Resepsi
-                            </button>
-
-                            <!-- Pengundang Button -->
-                            <button onclick="copyHostName()" class="col-span-2 lg:col-span-3 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2 px-2 rounded-lg transition-all duration-300 flex items-center justify-center text-xs active:scale-[0.98]">
-                                Salin Nama Pengundang
-                            </button>
-                        </div>
+                        <button onclick="copyHostName()" class="col-span-2 lg:col-span-3 bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Nama Pengundang</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Custom Alert Modal untuk pesan error/info -->
-    <div id="customAlertModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm">
-        <div class="bg-dark-800 border border-gold-500/30 rounded-xl p-6 max-w-sm w-full mx-4 shadow-2xl transform transition-all">
+    <!-- ================= 3 TOMBOL MENGAMBANG (FAB) KHUSUS MOBILE ================= -->
+    <div class="lg:hidden fixed bottom-6 right-4 z-40 flex flex-col gap-3">
+        <!-- Tombol Edit (Ke Atas / Form) -->
+        <button onclick="document.getElementById('formSection').scrollIntoView({behavior: 'smooth'})" class="bg-blue-600 hover:bg-blue-500 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition-transform active:scale-90" title="Edit Form">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+
+        <!-- Tombol Preview Teks -->
+        <button onclick="document.getElementById('previewBox').scrollIntoView({behavior: 'smooth', block: 'start'})" class="bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition-transform active:scale-90" title="Lihat Hasil">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+
+        <!-- Tombol Salin -->
+        <button onclick="document.getElementById('copySection').scrollIntoView({behavior: 'smooth', block: 'center'})" class="bg-gold-500 hover:bg-gold-400 text-black p-3.5 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.4)] flex items-center justify-center transition-transform active:scale-90" title="Salin Teks">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        </button>
+    </div>
+
+    <!-- Modal & Toast -->
+    <div id="customAlertModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="bg-dark-800 border border-gold-500/30 rounded-xl p-6 max-w-sm w-full shadow-2xl transform transition-all">
             <h3 class="text-gold-500 font-serif text-xl mb-2 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 Pemberitahuan
@@ -395,265 +398,227 @@
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 z-50 pointer-events-none">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-full shadow-2xl flex items-center gap-2 md:gap-3 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
     </div>
 
-    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none">
-        <div id="modalContent" class="bg-dark-800 border border-gold-500/30 p-6 rounded-xl shadow-2xl max-w-sm w-full mx-4 transform scale-95 transition-transform duration-300">
-            <h3 class="text-gold-500 font-serif text-xl mb-3 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none p-4">
+        <div id="modalContent" class="bg-dark-800 border border-gold-500/30 p-5 md:p-6 rounded-xl shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-300">
+            <h3 class="text-gold-500 font-serif text-lg md:text-xl mb-3 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 Pemberitahuan
             </h3>
             <p id="modalMessage" class="text-gray-300 text-sm mb-6 leading-relaxed"></p>
-            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2 rounded-lg transition-all shadow-lg active:scale-95">Mengerti</button>
+            <button onclick="closeModal()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95">Mengerti</button>
         </div>
     </div>
 
     <script>
+        // Array semua ID input untuk keperluan Auto-Save
+        const fieldIds = [
+            'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
+            'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
+            'tanggalAkad', 'jamAkad', 'tempatAkad', 'alamatAkad', 
+            'tanggalResepsi', 'jamResepsi', 'tempatResepsi', 'alamatResepsi', 'keteranganResepsi', 
+            'turutMengundang', 'hormat'
+        ];
 
-        // Fungsi untuk memutar posisi input form pria/wanita DAN tombol salinnya
+        // FITUR AUTO SAVE LOCAL STORAGE
+        function saveToLocalStorage() {
+            const data = {};
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) data[id] = el.value;
+            });
+            localStorage.setItem('invitationData', JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const dataStr = localStorage.getItem('invitationData');
+            if (dataStr) {
+                try {
+                    const data = JSON.parse(dataStr);
+                    fieldIds.forEach(id => {
+                        const el = document.getElementById(id);
+                        if (el && data[id] !== undefined) {
+                            el.value = data[id];
+                        }
+                    });
+                } catch (e) {
+                    console.error("Error membaca memori data", e);
+                }
+            }
+        }
+
+        // FITUR KOSONGKAN FORM
+        function clearForm() {
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (id === 'susunan') el.value = 'wanita';
+                    else el.value = '';
+                }
+            });
+            localStorage.removeItem('invitationData');
+            aturPosisiForm();
+            generateText();
+        }
+
         function aturPosisiForm() {
             const susunan = document.getElementById('susunan').value;
-            
-            // Elemen Form Input
             const fieldsetWanita = document.getElementById('fieldsetWanita');
             const fieldsetPria = document.getElementById('fieldsetPria');
-            
-            // Elemen Grup Tombol Salin
             const btnGroupWanita = document.getElementById('btnGroupWanita');
             const btnGroupPria = document.getElementById('btnGroupPria');
 
             if (susunan === 'pria') {
-                // Form Pria di atas
-                fieldsetPria.classList.remove('order-2');
-                fieldsetPria.classList.add('order-1');
-                fieldsetWanita.classList.remove('order-1');
-                fieldsetWanita.classList.add('order-2');
-                
-                // Tombol Pria di atas
-                btnGroupPria.classList.remove('order-2');
-                btnGroupPria.classList.add('order-1');
-                btnGroupWanita.classList.remove('order-1');
-                btnGroupWanita.classList.add('order-2');
+                fieldsetPria.classList.remove('order-2'); fieldsetPria.classList.add('order-1');
+                fieldsetWanita.classList.remove('order-1'); fieldsetWanita.classList.add('order-2');
+                btnGroupPria.classList.remove('order-2'); btnGroupPria.classList.add('order-1');
+                btnGroupWanita.classList.remove('order-1'); btnGroupWanita.classList.add('order-2');
             } else {
-                // Form Wanita di atas
-                fieldsetWanita.classList.remove('order-2');
-                fieldsetWanita.classList.add('order-1');
-                fieldsetPria.classList.remove('order-1');
-                fieldsetPria.classList.add('order-2');
-                
-                // Tombol Wanita di atas
-                btnGroupWanita.classList.remove('order-2');
-                btnGroupWanita.classList.add('order-1');
-                btnGroupPria.classList.remove('order-1');
-                btnGroupPria.classList.add('order-2');
+                fieldsetWanita.classList.remove('order-2'); fieldsetWanita.classList.add('order-1');
+                fieldsetPria.classList.remove('order-1'); fieldsetPria.classList.add('order-2');
+                btnGroupWanita.classList.remove('order-2'); btnGroupWanita.classList.add('order-1');
+                btnGroupPria.classList.remove('order-1'); btnGroupPria.classList.add('order-2');
             }
         }
 
-        // Pastikan posisi dieksekusi saat halaman pertama dimuat atau di-refresh
         document.addEventListener('DOMContentLoaded', () => {
+            // Muat memori data jika ada saat pertama buka
+            loadFromLocalStorage();
             aturPosisiForm();
+            generateText();
+
+            // Pasang event listener ke semua input agar otomatis menyimpan setiap ada perubahan
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    generateText();
+                    saveToLocalStorage();
+                });
+            });
         });
 
-        // Fungsi bantuan untuk mengubah angka menjadi kata urutan (sampai 10)
         function angkaKeUrutan(angkaStr) {
             const angka = parseInt(angkaStr);
-            if (isNaN(angka)) return angkaStr; // Kembalikan nilai asli jika bukan angka
-            
-            const urutan = {
-                1: 'pertama',
-                2: 'kedua',
-                3: 'ketiga',
-                4: 'keempat',
-                5: 'kelima',
-                6: 'keenam',
-                7: 'ketujuh',
-                8: 'kedelapan',
-                9: 'kesembilan',
-                10: 'kesepuluh'
-            };
-            
-            return urutan[angka] || "ke-" + angkaStr; // Gunakan "ke-XX" jika angkanya lebih dari 10
+            if (isNaN(angka)) return angkaStr;
+            const urutan = {1: 'pertama', 2: 'kedua', 3: 'ketiga', 4: 'keempat', 5: 'kelima', 6: 'keenam', 7: 'ketujuh', 8: 'kedelapan', 9: 'kesembilan', 10: 'kesepuluh'};
+            return urutan[angka] || "ke-" + angkaStr;
         }
 
         function copyBrideParent() {
-            const wAnak = document.getElementById('wAnak').value;
-            const wBapak = document.getElementById('wBapak').value;
-            const wIbu = document.getElementById('wIbu').value;
-            
-            let text = getParentText('wanita', wAnak, wBapak, wIbu);
-            
-            if (text) {
-                executeCopy(text, "Info Orang Tua Mempelai Wanita berhasil disalin!");
-            } else {
-                showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan (-).");
-            }
+            const text = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
+            if (text) executeCopy(text, "Info Orang Tua Mempelai Wanita berhasil disalin!");
+            else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan (-).");
         }
         
         function copyGroomParent() {
-            const pAnak = document.getElementById('pAnak').value;
-            const pBapak = document.getElementById('pBapak').value;
-            const pIbu = document.getElementById('pIbu').value;
-            
-            let text = getParentText('pria', pAnak, pBapak, pIbu);
-            
-            if (text) {
-                executeCopy(text, "Info Orang Tua Mempelai Pria berhasil disalin!");
-            } else {
-                showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan (-).");
-            }
+            const text = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
+            if (text) executeCopy(text, "Info Orang Tua Mempelai Pria berhasil disalin!");
+            else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan (-).");
         }
         
         function showModal(message) {
             const modal = document.getElementById('customModal');
-            const modalContent = document.getElementById('modalContent');
-            const msgEl = document.getElementById('modalMessage');
-            
-            msgEl.textContent = message;
+            document.getElementById('modalMessage').textContent = message;
             modal.classList.remove('hidden');
-            
             setTimeout(() => {
                 modal.classList.remove('opacity-0', 'pointer-events-none');
-                modalContent.classList.remove('scale-95');
-                modalContent.classList.add('scale-100');
+                document.getElementById('modalContent').classList.replace('scale-95', 'scale-100');
             }, 10);
         }
 
         function closeModal() {
             const modal = document.getElementById('customModal');
-            const modalContent = document.getElementById('modalContent');
-            
             modal.classList.add('opacity-0', 'pointer-events-none');
-            modalContent.classList.remove('scale-100');
-            modalContent.classList.add('scale-95');
-            
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            document.getElementById('modalContent').classList.replace('scale-100', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
         }
 
         function downloadTemplate() {
             try {
-                // Update format Excel blangko untuk mendukung Tanggal Akad & Resepsi terpisah
                 const ws_data = [
                     ["Field Data", "Isian (Ubah baris di kolom ini)"],
                     ["Susunan Nama (wanita/pria)", ""],
-                    ["Wanita - Nama Lengkap", ""],
-                    ["Wanita - Nama Panggilan", ""],
-                    ["Wanita - Anak Ke-", ""],
-                    ["Wanita - Nama Bapak", ""],
-                    ["Wanita - Nama Ibu", ""],
-                    ["Pria - Nama Lengkap", ""],
-                    ["Pria - Nama Panggilan", ""],
-                    ["Pria - Anak Ke-", ""],
-                    ["Pria - Nama Bapak", ""],
-                    ["Pria - Nama Ibu", ""],
-                    ["Hari & Tanggal Akad", ""],
-                    ["Waktu Akad", ""],
-                    ["Tempat Akad", ""],
-                    ["Alamat Lengkap Akad", ""],
-                    ["Hari & Tanggal Resepsi", ""],
-                    ["Waktu Resepsi", ""],
-                    ["Tempat Resepsi", ""],
-                    ["Alamat Lengkap Resepsi", ""],
-                    ["Turut Mengundang", ""],
-                    ["Hormat Kami (Tuan Rumah)", ""]
+                    ["Wanita - Nama Lengkap", ""], ["Wanita - Nama Panggilan", ""], ["Wanita - Anak Ke-", ""], ["Wanita - Nama Bapak", ""], ["Wanita - Nama Ibu", ""],
+                    ["Pria - Nama Lengkap", ""], ["Pria - Nama Panggilan", ""], ["Pria - Anak Ke-", ""], ["Pria - Nama Bapak", ""], ["Pria - Nama Ibu", ""],
+                    ["Hari & Tanggal Akad", ""], ["Waktu Akad", ""], ["Tempat Akad", ""], ["Alamat Lengkap Akad", ""],
+                    ["Hari & Tanggal Resepsi", ""], ["Waktu Resepsi", ""], ["Tempat Resepsi", ""], ["Alamat Lengkap Resepsi", ""], ["Keterangan Tambahan Resepsi", ""],
+                    ["Turut Mengundang", ""], ["Hormat Kami (Tuan Rumah)", ""]
                 ];
-
                 const ws = XLSX.utils.aoa_to_sheet(ws_data);
                 ws['!cols'] = [{ wch: 40 }, { wch: 60 }];
-
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data Undangan");
-                
                 XLSX.writeFile(wb, "Blangko_Data_Undangan.xlsx");
                 showToast("Blangko Excel berhasil diunduh!");
             } catch (error) {
-                showModal("Gagal membuat file Excel. Pastikan koneksi internet stabil untuk memuat library.");
+                showModal("Gagal membuat file Excel. Pastikan koneksi internet stabil.");
+            }
+        }
+        
+        function exportToExcel() {
+            try {
+                const ws_data = [
+                    ["Field Data", "Isian (Ubah baris di kolom ini)"],
+                    ["Susunan Nama (wanita/pria)", document.getElementById('susunan').value],
+                    ["Wanita - Nama Lengkap", document.getElementById('wNama').value], ["Wanita - Nama Panggilan", document.getElementById('wPanggilan').value], ["Wanita - Anak Ke-", document.getElementById('wAnak').value], ["Wanita - Nama Bapak", document.getElementById('wBapak').value], ["Wanita - Nama Ibu", document.getElementById('wIbu').value],
+                    ["Pria - Nama Lengkap", document.getElementById('pNama').value], ["Pria - Nama Panggilan", document.getElementById('pPanggilan').value], ["Pria - Anak Ke-", document.getElementById('pAnak').value], ["Pria - Nama Bapak", document.getElementById('pBapak').value], ["Pria - Nama Ibu", document.getElementById('pIbu').value],
+                    ["Hari & Tanggal Akad", document.getElementById('tanggalAkad').value], ["Waktu Akad", document.getElementById('jamAkad').value], ["Tempat Akad", document.getElementById('tempatAkad').value], ["Alamat Lengkap Akad", document.getElementById('alamatAkad').value],
+                    ["Hari & Tanggal Resepsi", document.getElementById('tanggalResepsi').value], ["Waktu Resepsi", document.getElementById('jamResepsi').value], ["Tempat Resepsi", document.getElementById('tempatResepsi').value], ["Alamat Lengkap Resepsi", document.getElementById('alamatResepsi').value], ["Keterangan Tambahan Resepsi", document.getElementById('keteranganResepsi').value],
+                    ["Turut Mengundang", document.getElementById('turutMengundang').value], ["Hormat Kami (Tuan Rumah)", document.getElementById('hormat').value]
+                ];
+                const ws = XLSX.utils.aoa_to_sheet(ws_data);
+                ws['!cols'] = [{ wch: 40 }, { wch: 60 }];
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data Undangan");
+                XLSX.writeFile(wb, "Data_Undangan_Tersimpan.xlsx");
+                
+                // Menghapus data dari form & cache setelah disimpan
+                clearForm();
+                showModal("Data berhasil di-ekspor ke Excel dan form telah dikosongkan untuk pengerjaan selanjutnya.");
+            } catch (error) {
+                console.error(error);
+                showModal("Gagal menyimpan file Excel. Pastikan koneksi internet stabil.");
             }
         }
 
         function handleExcelFile(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
                     const data = new Uint8Array(e.target.result);
                     const workbook = XLSX.read(data, {type: 'array'});
+                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
                     
-                    const firstSheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[firstSheetName];
-                    
-                    const rows = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-                    
-                    if (rows.length < 2) {
-                        showModal("File Excel tampaknya kosong atau tidak sesuai format.");
-                        return;
-                    }
+                    if (rows.length < 2) { showModal("File Excel kosong atau format tidak sesuai."); return; }
 
                     const fieldMap = {
-                        "Susunan Nama (wanita/pria)": "susunan",
-                        "Wanita - Nama Lengkap": "wNama",
-                        "Wanita - Nama Panggilan": "wPanggilan",
-                        "Wanita - Anak Ke-": "wAnak",
-                        "Wanita - Nama Bapak": "wBapak",
-                        "Wanita - Nama Ibu": "wIbu",
-                        "Pria - Nama Lengkap": "pNama",
-                        "Pria - Nama Panggilan": "pPanggilan",
-                        "Pria - Anak Ke-": "pAnak",
-                        "Pria - Nama Bapak": "pBapak",
-                        "Pria - Nama Ibu": "pIbu",
-                        "Hari & Tanggal Akad": "tanggalAkad",
-                        "Waktu Akad": "jamAkad",
-                        "Tempat Akad": "tempatAkad",
-                        "Alamat Lengkap Akad": "alamatAkad",
-                        "Hari & Tanggal Resepsi": "tanggalResepsi",
-                        "Waktu Resepsi": "jamResepsi",
-                        "Tempat Resepsi": "tempatResepsi",
-                        "Alamat Lengkap Resepsi": "alamatResepsi",
-                        "Turut Mengundang": "turutMengundang",
-                        "Hormat Kami (Tuan Rumah)": "hormat"
+                        "Susunan Nama (wanita/pria)": "susunan", "Wanita - Nama Lengkap": "wNama", "Wanita - Nama Panggilan": "wPanggilan", "Wanita - Anak Ke-": "wAnak", "Wanita - Nama Bapak": "wBapak", "Wanita - Nama Ibu": "wIbu",
+                        "Pria - Nama Lengkap": "pNama", "Pria - Nama Panggilan": "pPanggilan", "Pria - Anak Ke-": "pAnak", "Pria - Nama Bapak": "pBapak", "Pria - Nama Ibu": "pIbu",
+                        "Hari & Tanggal Akad": "tanggalAkad", "Waktu Akad": "jamAkad", "Tempat Akad": "tempatAkad", "Alamat Lengkap Akad": "alamatAkad",
+                        "Hari & Tanggal Resepsi": "tanggalResepsi", "Waktu Resepsi": "jamResepsi", "Tempat Resepsi": "tempatResepsi", "Alamat Lengkap Resepsi": "alamatResepsi", "Keterangan Tambahan Resepsi": "keteranganResepsi",
+                        "Turut Mengundang": "turutMengundang", "Hormat Kami (Tuan Rumah)": "hormat"
                     };
 
                     let importCount = 0;
-
                     for (let i = 1; i < rows.length; i++) {
-                        const row = rows[i];
-                        if (row && row.length >= 2) {
-                            const fieldName = row[0];
-                            const value = row[1];
-                            
-                            // Backward compatibility untuk template Excel lama
-                            if (fieldName === "Hari dan Tanggal Acara" && value !== undefined) {
-                                document.getElementById('tanggalAkad').value = value;
-                                document.getElementById('tanggalResepsi').value = value;
-                                importCount++;
-                                continue;
-                            }
-
+                        if (rows[i] && rows[i].length >= 2) {
+                            const fieldName = rows[i][0];
+                            const value = rows[i][1];
                             const targetId = fieldMap[fieldName];
                             if (targetId && value !== undefined) {
                                 const inputEl = document.getElementById(targetId);
                                 if (inputEl) {
                                     if (targetId === "susunan") {
-                                        // PENGAMANAN SUSUNAN NAMA: Hilangkan spasi berlebih dan karakter tak terlihat
                                         let valLower = String(value).toLowerCase().replace(/\s+/g, '');
-                                        // Cek apakah mengandung kata "wanita" atau "pria"
-                                        if (valLower.includes("wanita")) {
-                                            inputEl.value = "wanita";
-                                        } else if (valLower.includes("pria")) {
-                                            inputEl.value = "pria";
-                                        } else {
-                                            // Default ke wanita jika tidak dikenali
-                                            inputEl.value = "wanita";
-                                        }
+                                        inputEl.value = (valLower.includes("pria")) ? "pria" : "wanita";
                                     } else if (targetId === "turutMengundang") {
-                                        const valStr = String(value).replace(/, /g, '\n').replace(/,/g, '\n');
-                                        inputEl.value = valStr;
+                                        inputEl.value = String(value).replace(/, /g, '\n').replace(/,/g, '\n');
                                     } else {
                                         inputEl.value = value;
                                     }
@@ -664,127 +629,62 @@
                     }
 
                     if (importCount > 0) {
-                        // SETELAH IMPORT SELESAI, PERBARUI TAMPILAN FORM SESUAI SUSUNAN NAMA
+                        saveToLocalStorage(); // Simpan hasil import ke cache
                         aturPosisiForm();
                         generateText();
-                        showToast(`Berhasil mengimpor ${importCount} data!`);
+                        showToast(`Berhasil mengimpor ${importCount} baris data!`);
                     } else {
-                        showModal("Tidak ada data yang cocok. Pastikan menggunakan Blangko yang benar.");
+                        showModal("Tidak ada data yang cocok. Pastikan Blangko benar.");
                     }
-
                 } catch (error) {
-                    console.error(error);
                     showModal("Terjadi kesalahan saat membaca file Excel.");
                 }
-                
                 event.target.value = "";
             };
-            
             reader.readAsArrayBuffer(file);
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const inputs = document.querySelectorAll('input, select, textarea');
-            inputs.forEach(input => {
-                input.addEventListener('input', generateText);
-            });
-            generateText();
-        });
-
-        function isValid(str) {
-            if (!str) return false;
-            const cleanStr = str.trim();
-            return cleanStr !== '' && cleanStr !== '-';
-        }
+        function isValid(str) { return str && str.trim() !== '' && str.trim() !== '-'; }
 
         function getParentText(jenis, anak, bapak, ibu) {
-            const hasAnak = isValid(anak);
-            const hasBapak = isValid(bapak);
-            const hasIbu = isValid(ibu);
-
-            if (!hasAnak && !hasBapak && !hasIbu) {
-                return "";
-            }
-
-            let text = "";
+            const hasAnak = isValid(anak), hasBapak = isValid(bapak), hasIbu = isValid(ibu);
+            if (!hasAnak && !hasBapak && !hasIbu) return "";
             
-            // Menetapkan gelaran secara statik kepada "Anak" berbanding "Putra"/"Putri"
-            let title = "Anak"; 
-
-            if (hasAnak) {
-                // Menggunakan fungsi angkaKeUrutan untuk menukar angka "1" menjadi "pertama", dsb.
-                let urutan = angkaKeUrutan(anak.trim());
-                text += `${title} ${urutan} dari `;
-            } else {
-                text += `${title} dari `;
-            }
-
-            if (hasBapak && hasIbu) {
-                text += `Bapak ${bapak.trim()} & Ibu ${ibu.trim()}`;
-            } else if (hasBapak) {
-                text += `Bapak ${bapak.trim()}`;
-            } else if (hasIbu) {
-                text += `Ibu ${ibu.trim()}`;
-            } else {
-                text = text.trim();
-                if (text.endsWith("dari")) {
-                    text = text.substring(0, text.length - 4).trim();
-                }
-            }
+            let text = hasAnak ? `Anak ${angkaKeUrutan(anak.trim())} dari ` : "Anak dari ";
+            if (hasBapak && hasIbu) text += `Bapak ${bapak.trim()} & Ibu ${ibu.trim()}`;
+            else if (hasBapak) text += `Bapak ${bapak.trim()}`;
+            else if (hasIbu) text += `Ibu ${ibu.trim()}`;
+            else text = text.trim().replace(/ dari$/, "");
+            
             return text;
         }
 
         function generateText() {
             const susunan = document.getElementById('susunan').value;
             
-            const wNama = document.getElementById('wNama').value.trim();
-            const wPanggilan = document.getElementById('wPanggilan').value.trim();
-            const wAnak = document.getElementById('wAnak').value;
-            const wBapak = document.getElementById('wBapak').value;
-            const wIbu = document.getElementById('wIbu').value;
-            
-            const pNama = document.getElementById('pNama').value.trim();
-            const pPanggilan = document.getElementById('pPanggilan').value.trim();
-            const pAnak = document.getElementById('pAnak').value;
-            const pBapak = document.getElementById('pBapak').value;
-            const pIbu = document.getElementById('pIbu').value;
-            
-            // Pengaturan Akad & Resepsi
-            const tanggalAkad = document.getElementById('tanggalAkad').value.trim();
-            const jamAkad = document.getElementById('jamAkad').value.trim();
-            const tempatAkad = document.getElementById('tempatAkad').value.trim();
-            const alamatAkad = document.getElementById('alamatAkad').value.trim();
-
-            const tanggalResepsi = document.getElementById('tanggalResepsi').value.trim();
-            const jamResepsi = document.getElementById('jamResepsi').value.trim();
-            const tempatResepsi = document.getElementById('tempatResepsi').value.trim();
-            const alamatResepsi = document.getElementById('alamatResepsi').value.trim();
-            
-            const turutMengundang = document.getElementById('turutMengundang').value;
-            const hormat = document.getElementById('hormat').value.trim();
-
-            const wNamaLengkap = wPanggilan ? (wNama ? `${wNama} (${wPanggilan})` : `(${wPanggilan})`) : wNama;
-            const pNamaLengkap = pPanggilan ? (pNama ? `${pNama} (${pPanggilan})` : `(${pPanggilan})`) : pNama;
-
-            const wParentStr = getParentText('wanita', wAnak, wBapak, wIbu);
+            const wNamaLengkap = document.getElementById('wPanggilan').value.trim() ? (document.getElementById('wNama').value.trim() ? `${document.getElementById('wNama').value.trim()} (${document.getElementById('wPanggilan').value.trim()})` : `(${document.getElementById('wPanggilan').value.trim()})`) : document.getElementById('wNama').value.trim();
+            const wParentStr = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
             const wBlock = wNamaLengkap + (wParentStr ? `\n${wParentStr}` : "");
 
-            const pParentStr = getParentText('pria', pAnak, pBapak, pIbu);
+            const pNamaLengkap = document.getElementById('pPanggilan').value.trim() ? (document.getElementById('pNama').value.trim() ? `${document.getElementById('pNama').value.trim()} (${document.getElementById('pPanggilan').value.trim()})` : `(${document.getElementById('pPanggilan').value.trim()})`) : document.getElementById('pNama').value.trim();
+            const pParentStr = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
             const pBlock = pNamaLengkap + (pParentStr ? `\n${pParentStr}` : "");
 
-            // LOGIKA UNTUK MENAMPILKAN NAMA PRIA DI ATAS JIKA SUSUNAN = PRIA
             let block1 = susunan === 'pria' ? pBlock : wBlock;
             let block2 = susunan === 'pria' ? wBlock : pBlock;
 
-            let turutMengundangText = "";
-            if (turutMengundang.trim() !== "") {
-                const lines = turutMengundang.split('\n').filter(line => line.trim() !== '');
-                if (lines.length > 0) {
-                    turutMengundangText = "\n\nTurut Mengundang:\n" + lines.map(line => `* ${line.trim()}`).join('\n');
-                }
-            }
+            const turutMengundang = document.getElementById('turutMengundang').value;
+            let turutMengundangText = (turutMengundang.trim() !== "") ? "\n\nTurut Mengundang:\n" + turutMengundang.split('\n').filter(l => l.trim() !== '').map(l => `* ${l.trim()}`).join('\n') : "";
 
-            const template = `Bismillahirrahmanirrahim
+            const ket = document.getElementById('keteranganResepsi').value.trim();
+            let keteranganResepsiText = ket ? `\n${ket}` : "";
+
+            const jAkad = document.getElementById('jamAkad').value.trim();
+            const jResepsi = document.getElementById('jamResepsi').value.trim();
+            let jamAkadText = jAkad ? (jAkad.toLowerCase().includes("pukul") ? jAkad : `Pukul ${jAkad}`) : "";
+            let jamResepsiText = jResepsi ? (jResepsi.toLowerCase().includes("pukul") ? jResepsi : `Pukul ${jResepsi}`) : "";
+
+            document.getElementById('previewText').value = `Bismillahirrahmanirrahim
 Assalamu'alaikum Warahmatullahi Wabarakatuh
 Dengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,
 kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri
@@ -796,27 +696,21 @@ ${block1}
 
 ${block2}
 
-DOA UNTUK PENGANTIN
-Barakallahu Laka, Wa Baraka 'alaika Wa Jama'a Bainakuma Fii Khair
-"Mudah-mudahan Allah memberkahimu, baik ketika senang maupun susah
-dan selalu mengumpulkan kalian berdua dalam kebaikan."
-(H.R. Abu Daud)
-
 yang insyaa Allah akan dilaksanakan pada:
 
 AKAD NIKAH
-Hari/Tanggal: ${tanggalAkad}
-Pukul ${jamAkad}
+Hari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}
+${jamAkadText}
 Bertempat di
-${tempatAkad}
-${alamatAkad}
+${document.getElementById('tempatAkad').value.trim()}
+${document.getElementById('alamatAkad').value.trim()}
 
 RESEPSI
-Hari/Tanggal: ${tanggalResepsi}
-Pukul ${jamResepsi}
+Hari/Tanggal: ${document.getElementById('tanggalResepsi').value.trim()}${keteranganResepsiText}
+${jamResepsiText}
 Bertempat di
-${tempatResepsi}
-${alamatResepsi}
+${document.getElementById('tempatResepsi').value.trim()}
+${document.getElementById('alamatResepsi').value.trim()}
 
 Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
 berkenan hadir dan memberikan doa restu kepada kedua mempelai.
@@ -825,192 +719,54 @@ Atas kehadirannya kami ucapkan terimakasih.
 Wassalamu'alaikum Warahmatullahi Wabarakatuh
 
 Hormat kami yang mengundang
-${hormat}
-Kedua Mempelai${turutMengundangText}`;
-
-            document.getElementById('previewText').value = template;
+${document.getElementById('hormat').value.trim()}
+${turutMengundangText}`;
         }
 
-        function copyFullText() {
-            const textArea = document.getElementById('previewText');
-            executeCopy(textArea.value, "Seluruh teks berhasil disalin!");
-        }
-
-        function copyGroomName() {
-            const pNama = document.getElementById('pNama').value.trim();
-            executeCopy(pNama, "Nama Mempelai Pria berhasil disalin!");
-        }
-
-        function copyBrideName() {
-            const wNama = document.getElementById('wNama').value.trim();
-            executeCopy(wNama, "Nama Mempelai Wanita berhasil disalin!");
-        }
-
-        function copyTanggalAkad() {
-            const tanggalAkad = document.getElementById('tanggalAkad').value.trim();
-            executeCopy(tanggalAkad, "Tanggal Akad berhasil disalin!");
-        }
-
-        function copyTanggalResepsi() {
-            const tanggalResepsi = document.getElementById('tanggalResepsi').value.trim();
-            executeCopy(tanggalResepsi, "Tanggal Resepsi Full berhasil disalin!");
-        }
-
-        // Fungsi Parser Tanggal untuk memecah tanggal, bulan, tahun
+        // Functions eksekusi Copy ke Clipboard
+        function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
+        function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
+        function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
+        function copyTanggalAkad() { executeCopy(document.getElementById('tanggalAkad').value.trim(), "Tanggal Akad berhasil disalin!"); }
+        function copyTanggalResepsi() { executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); }
+        
         function parseDateString(dateString) {
-            // Regex mencari pola: angka 1-2 digit (tgl), huruf/angka (bln), angka 4 digit (thn)
-            // Mengabaikan kata awal seperti "Minggu," atau "Senin,"
-            const regexText = /(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/;
-            const match = dateString.match(regexText);
-            if (match) {
-                return {
-                    tanggal: match[1],
-                    bulan: match[2],
-                    tahun: match[3]
-                };
-            }
-            return null;
+            const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
+            return match ? {tanggal: match[1], bulan: match[2], tahun: match[3]} : null;
         }
-
-        // Fungsi Ekstraksi Resepsi Tanggal (Angka Saja)
-        function copyResepsiTanggalSaja() {
-            const val = document.getElementById('tanggalResepsi').value.trim();
-            const parsed = parseDateString(val);
-            if (parsed) {
-                executeCopy(parsed.tanggal, "Tanggal Resepsi (Angka) berhasil disalin!");
-            } else {
-                showModal("Format teks tidak dikenali. Harap isi tanggal dengan format seperti '08 November 2026'.");
-            }
-        }
-
-        // Fungsi Ekstraksi Resepsi Bulan Saja
-        function copyResepsiBulanSaja() {
-            const val = document.getElementById('tanggalResepsi').value.trim();
-            const parsed = parseDateString(val);
-            if (parsed) {
-                executeCopy(parsed.bulan, "Bulan Resepsi berhasil disalin!");
-            } else {
-                showModal("Format teks tidak dikenali. Harap isi tanggal dengan format seperti '08 November 2026'.");
-            }
-        }
-
-        // Fungsi Ekstraksi Resepsi Tahun Saja
-        function copyResepsiTahunSaja() {
-            const val = document.getElementById('tanggalResepsi').value.trim();
-            const parsed = parseDateString(val);
-            if (parsed) {
-                executeCopy(parsed.tahun, "Tahun Resepsi berhasil disalin!");
-            } else {
-                showModal("Format teks tidak dikenali. Harap isi tanggal dengan format seperti '08 November 2026'.");
-            }
-        }
-
-        function copyAlamatAkad() {
-            const tempat = document.getElementById('tempatAkad').value.trim();
-            const alamat = document.getElementById('alamatAkad').value.trim();
-            const addressText = `Bertempat di\n${tempat}\n${alamat}`;
-            executeCopy(addressText, "Lokasi & Alamat Akad berhasil disalin!");
-        }
-
-        function copyAlamatResepsi() {
-            const tempat = document.getElementById('tempatResepsi').value.trim();
-            const alamat = document.getElementById('alamatResepsi').value.trim();
-            const addressText = `Bertempat di\n${tempat}\n${alamat}`;
-            executeCopy(addressText, "Lokasi & Alamat Resepsi berhasil disalin!");
-        }
-
+        function copyResepsiTanggalSaja() { const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); if(p) executeCopy(p.tanggal, "Tanggal (Angka) disalin!"); else showModal("Format tanggal tidak valid."); }
+        function copyResepsiBulanSaja() { const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); if(p) executeCopy(p.bulan, "Bulan disalin!"); else showModal("Format tanggal tidak valid."); }
+        function copyResepsiTahunSaja() { const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); if(p) executeCopy(p.tahun, "Tahun disalin!"); else showModal("Format tanggal tidak valid."); }
+        
+        function copyAlamatAkad() { executeCopy(`Bertempat di\n${document.getElementById('tempatAkad').value.trim()}\n${document.getElementById('alamatAkad').value.trim()}`, "Alamat Akad berhasil disalin!"); }
+        function copyAlamatResepsi() { executeCopy(`Bertempat di\n${document.getElementById('tempatResepsi').value.trim()}\n${document.getElementById('alamatResepsi').value.trim()}`, "Alamat Resepsi berhasil disalin!"); }
+        function copyKeteranganResepsi() { const ket = document.getElementById('keteranganResepsi').value.trim(); if(ket) executeCopy(ket, "Keterangan resepsi disalin!"); else showModal("Kolom Keterangan masih kosong."); }
+        
         function copyTurutMengundang() {
-            const turutMengundang = document.getElementById('turutMengundang').value;
-            const lines = turutMengundang.split('\n').filter(line => line.trim() !== '');
-            if(lines.length === 0) {
-                showModal("Belum ada nama pada kolom Turut Mengundang.");
-                return;
-            }
-            const text = lines.map(line => `* ${line.trim()}`).join('\n');
-            executeCopy(text, "Daftar Turut Mengundang berhasil disalin!");
+            const lines = document.getElementById('turutMengundang').value.split('\n').filter(l => l.trim() !== '');
+            if(lines.length === 0) showModal("Belum ada nama Pengundang.");
+            else executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'), "Daftar Turut Mengundang disalin!");
         }
-
-        function copyHostName() {
-            const hormat = document.getElementById('hormat').value.trim();
-            executeCopy(hormat, "Nama yang mengundang berhasil disalin!");
-        }
-
-        function copyAkadTime() {
-            const jam = document.getElementById('jamAkad').value.trim();
-            let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
-            executeCopy(textToCopy, "Waktu akad berhasil disalin!");
-        }
-
-        function copyResepsiTime() {
-            const jam = document.getElementById('jamResepsi').value.trim();
-            let textToCopy = jam.toLowerCase().startsWith("pukul") ? jam : `Pukul ${jam}`;
-            executeCopy(textToCopy, "Waktu resepsi berhasil disalin!");
-        }
+        function copyHostName() { executeCopy(document.getElementById('hormat').value.trim(), "Nama yang mengundang disalin!"); }
+        function copyAkadTime() { const j = document.getElementById('jamAkad').value.trim(); if(!j){showModal("Waktu akad kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu akad disalin!"); }
+        function copyResepsiTime() { const j = document.getElementById('jamResepsi').value.trim(); if(!j){showModal("Waktu resepsi kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu resepsi disalin!"); }
 
         function executeCopy(textToCopy, successMsg) {
-            if (!textToCopy) {
-                console.warn("Tidak ada teks untuk disalin.");
-                return;
-            }
-
-            const tempTextArea = document.createElement("textarea");
-            tempTextArea.value = textToCopy;
-            tempTextArea.style.top = "0";
-            tempTextArea.style.left = "0";
-            tempTextArea.style.position = "fixed";
-            tempTextArea.style.opacity = "0";
-
-            document.body.appendChild(tempTextArea);
-            tempTextArea.focus();
-            tempTextArea.select();
-
-            try {
-                const successful = document.execCommand('copy');
-                if (successful) {
-                    showToast(successMsg);
-                } else {
-                    console.error('Gagal menyalin teks (execCommand returned false).');
-                }
-            } catch (err) {
-                console.error('Oops, tidak dapat menyalin', err);
-            }
-            
-            document.body.removeChild(tempTextArea);
+            if (!textToCopy) return;
+            const temp = document.createElement("textarea");
+            temp.value = textToCopy; temp.style.position = "fixed"; temp.style.opacity = "0";
+            document.body.appendChild(temp); temp.focus(); temp.select();
+            try { document.execCommand('copy') ? showToast(successMsg) : console.error('Gagal menyalin.'); } catch (err) {}
+            document.body.removeChild(temp);
         }
 
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toast-message');
-            
-            if (message) {
-                toastMsg.textContent = message;
-            }
-
-            if (toastTimeout) {
-                clearTimeout(toastTimeout);
-            }
-
-            toast.classList.remove('toast-exit');
-            toast.classList.add('toast-enter');
-
-            toastTimeout = setTimeout(() => {
-                toast.classList.remove('toast-enter');
-                toast.classList.add('toast-exit');
-            }, 3000);
-        }
-
-        function customAlert(message) {
-            const modal = document.getElementById('customAlertModal');
-            document.getElementById('customAlertMessage').textContent = message;
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeCustomAlert() {
-            const modal = document.getElementById('customAlertModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+            if (message) document.getElementById('toast-message').textContent = message;
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toast.classList.replace('toast-exit', 'toast-enter');
+            toastTimeout = setTimeout(() => toast.classList.replace('toast-enter', 'toast-exit'), 3000);
         }
     </script>
 </body>
