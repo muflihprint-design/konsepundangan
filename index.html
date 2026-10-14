@@ -240,6 +240,11 @@
                 <fieldset>
                     <legend>Waktu & Tempat Acara</legend>
 
+                    <div class="input-group mb-4 border-b border-gold-500/20 pb-3">
+                        <label class="input-label" for="teksPengantarAcara">Teks Pengantar Acara</label>
+                        <input type="text" id="teksPengantarAcara" class="input-field" value="yang insyaa Allah akan dilaksanakan pada:">
+                    </div>
+
                     <div class="mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Akad Nikah</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         <div class="input-group">
@@ -298,6 +303,26 @@
                     <div class="input-group mb-0">
                         <label class="input-label" for="hormat">Hormat Kami (Tuan Rumah)</label>
                         <input type="text" id="hormat" class="input-field" value="" placeholder="Contoh: Bpk. Samsul & Ny Ruth">
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Teks Pembuka & Penutup</legend>
+                    <div class="input-group mb-3">
+                        <label class="input-label" for="teksPembuka">Teks Pembuka</label>
+                        <textarea id="teksPembuka" rows="6" class="input-field resize-none">Bismillahirrahmanirrahim
+Assalamu'alaikum Warahmatullahi Wabarakatuh
+Dengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,
+kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri
+acara pernikahan putra-putri kami:</textarea>
+                    </div>
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="teksPenutup">Teks Penutup</label>
+                        <textarea id="teksPenutup" rows="5" class="input-field resize-none">Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
+berkenan hadir dan memberikan doa restu kepada kedua mempelai.
+Atas kehadirannya kami ucapkan terimakasih.
+
+Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                     </div>
                 </fieldset>
             </form>
@@ -418,12 +443,13 @@
     </div>
 
     <script>
-        const fieldIds = [
+     const fieldIds = [
             'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
             'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
+            'teksPengantarAcara', // Tambahkan ID ini
             'tanggalAkad', 'jamAkad', 'tempatAkad', 'alamatAkad', 
             'tanggalResepsi', 'jamResepsi', 'tempatResepsi', 'alamatResepsi', 'keteranganResepsi', 
-            'turutMengundang', 'hormat'
+            'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
         ];
 
         function saveToLocalStorage() {
@@ -792,11 +818,12 @@ async function sendPdfToWhatsApp() {
             let jamAkadText = jAkad ? (jAkad.toLowerCase().includes("pukul") ? jAkad : `Pukul ${jAkad}`) : "";
             let jamResepsiText = jResepsi ? (jResepsi.toLowerCase().includes("pukul") ? jResepsi : `Pukul ${jResepsi}`) : "";
 
-            document.getElementById('previewText').value = `Bismillahirrahmanirrahim
-Assalamu'alaikum Warahmatullahi Wabarakatuh
-Dengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,
-kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri
-acara pernikahan putra-putri kami:
+            const teksPembuka = document.getElementById('teksPembuka').value;
+            const teksPenutup = document.getElementById('teksPenutup').value;
+            // Ambil nilai teks pengantar acara
+            const teksPengantarAcara = document.getElementById('teksPengantarAcara').value; 
+
+            document.getElementById('previewText').value = `${teksPembuka}
 
 ${block1}
 
@@ -804,7 +831,7 @@ ${block1}
 
 ${block2}
 
-yang insyaa Allah akan dilaksanakan pada:
+${teksPengantarAcara}
 
 AKAD NIKAH
 Hari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}
@@ -820,11 +847,7 @@ Bertempat di
 ${document.getElementById('tempatResepsi').value.trim()}
 ${document.getElementById('alamatResepsi').value.trim()}
 
-Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i
-berkenan hadir dan memberikan doa restu kepada kedua mempelai.
-Atas kehadirannya kami ucapkan terimakasih.
-
-Wassalamu'alaikum Warahmatullahi Wabarakatuh
+${teksPenutup}
 
 Hormat kami yang mengundang
 ${document.getElementById('hormat').value.trim()}
