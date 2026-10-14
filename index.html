@@ -155,9 +155,10 @@
                     Import Data
                     <input type="file" id="excelUpload" accept=".xlsx, .xls" class="hidden" onchange="handleExcelFile(event)">
                 </label>
-                <button onclick="exportToExcel()" class="w-full bg-purple-700/80 hover:bg-purple-600 text-white border border-purple-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                    Simpan (Excel)
+                <!-- Tombol Berubah Menjadi Kirim ke WA dengan Warna Hijau Khas WA -->
+                <button onclick="sendToWhatsApp()" class="w-full bg-[#25D366]/80 hover:bg-[#25D366] text-white border border-[#25D366]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                    Kirim ke WA (Excel)
                 </button>
             </div>
 
@@ -189,18 +190,18 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-1 md:mt-0">
                             <div class="input-group">
                                 <label class="input-label" for="wAnak">Anak Ke-</label>
-                                <input type="text" id="wAnak" class="input-field" value="" placeholder="Contoh: 1, 2, atau -">
+                                <input type="text" id="wAnak" class="input-field" value="" placeholder="Contoh: 1 atau 2">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wBapak">Nama Bapak</label>
-                                <input type="text" id="wBapak" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
+                                <input type="text" id="wBapak" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="wIbu">Nama Ibu</label>
-                                <input type="text" id="wIbu" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
+                                <input type="text" id="wIbu" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
                             </div>
                         </div>
-                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua disembunyikan jika kolom Anak, Bapak, & Ibu diisi (-).</p>
+                        <p class="text-[10px] text-gray-500 italic mt-[-10px]">Info orang tua disembunyikan jika kolom Anak, Bapak, & Ibu dikosongkan.</p>
                     </fieldset>
 
                     <fieldset id="fieldsetPria" class="order-2 transition-all duration-300">
@@ -218,15 +219,15 @@
                         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4 mt-1 md:mt-0">
                             <div class="input-group">
                                 <label class="input-label" for="pAnak">Anak Ke-</label>
-                                <input type="text" id="pAnak" class="input-field" value="" placeholder="Contoh: 1, 2, atau -">
+                                <input type="text" id="pAnak" class="input-field" value="" placeholder="Contoh: 1 atau 2">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="pBapak">Nama Bapak</label>
-                                <input type="text" id="pBapak" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
+                                <input type="text" id="pBapak" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
                             </div>
                             <div class="input-group">
                                 <label class="input-label" for="pIbu">Nama Ibu</label>
-                                <input type="text" id="pIbu" class="input-field" value="" placeholder="Isi '-' untuk disembunyikan">
+                                <input type="text" id="pIbu" class="input-field" value="" placeholder="Kosongkan jika tidak perlu">
                             </div>
                         </div>
                     </fieldset>
@@ -311,7 +312,6 @@
                         </h2>
                     </div>
 
-                    <!-- Textarea sekarang sangat lega ke bawah -->
                     <textarea id="previewText" readonly 
                         class="w-full bg-transparent text-gray-200 font-mono text-xs md:text-sm resize-none focus:outline-none custom-scrollbar leading-relaxed h-[65vh] md:h-[80vh]"
                         style="scrollbar-width: thin; scrollbar-color: #d4af37 transparent;"></textarea>
@@ -326,7 +326,6 @@
                 </h2>
                 
                 <div class="flex flex-col gap-3">
-                    <!-- Tombol Utama -->
                     <button onclick="copyFullText()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-3 px-4 rounded-lg shadow-lg hover:shadow-gold-500/20 transition-all duration-300 flex items-center justify-center gap-2 active:scale-[0.98]">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Salin Semua Teks
@@ -415,7 +414,6 @@
     </div>
 
     <script>
-        // Array semua ID input untuk keperluan Auto-Save
         const fieldIds = [
             'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
             'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
@@ -424,7 +422,6 @@
             'turutMengundang', 'hormat'
         ];
 
-        // FITUR AUTO SAVE LOCAL STORAGE
         function saveToLocalStorage() {
             const data = {};
             fieldIds.forEach(id => {
@@ -451,7 +448,6 @@
             }
         }
 
-        // FITUR KOSONGKAN FORM
         function clearForm() {
             fieldIds.forEach(id => {
                 const el = document.getElementById(id);
@@ -486,12 +482,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Muat memori data jika ada saat pertama buka
             loadFromLocalStorage();
             aturPosisiForm();
             generateText();
 
-            // Pasang event listener ke semua input agar otomatis menyimpan setiap ada perubahan
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
@@ -511,13 +505,13 @@
         function copyBrideParent() {
             const text = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
             if (text) executeCopy(text, "Info Orang Tua Mempelai Wanita berhasil disalin!");
-            else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan (-).");
+            else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan.");
         }
         
         function copyGroomParent() {
             const text = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
             if (text) executeCopy(text, "Info Orang Tua Mempelai Pria berhasil disalin!");
-            else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan (-).");
+            else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan.");
         }
         
         function showModal(message) {
@@ -559,7 +553,7 @@
             }
         }
         
-        function exportToExcel() {
+        async function sendToWhatsApp() {
             try {
                 const ws_data = [
                     ["Field Data", "Isian (Ubah baris di kolom ini)"],
@@ -570,18 +564,39 @@
                     ["Hari & Tanggal Resepsi", document.getElementById('tanggalResepsi').value], ["Waktu Resepsi", document.getElementById('jamResepsi').value], ["Tempat Resepsi", document.getElementById('tempatResepsi').value], ["Alamat Lengkap Resepsi", document.getElementById('alamatResepsi').value], ["Keterangan Tambahan Resepsi", document.getElementById('keteranganResepsi').value],
                     ["Turut Mengundang", document.getElementById('turutMengundang').value], ["Hormat Kami (Tuan Rumah)", document.getElementById('hormat').value]
                 ];
+                
                 const ws = XLSX.utils.aoa_to_sheet(ws_data);
                 ws['!cols'] = [{ wch: 40 }, { wch: 60 }];
                 const wb = XLSX.utils.book_new();
                 XLSX.utils.book_append_sheet(wb, ws, "Data Undangan");
-                XLSX.writeFile(wb, "Data_Undangan_Tersimpan.xlsx");
                 
-                // Menghapus data dari form & cache setelah disimpan
-                clearForm();
-                showModal("Data berhasil di-ekspor ke Excel dan form telah dikosongkan untuk pengerjaan selanjutnya.");
+                // Konversi Excel ke format File untuk bisa dibagikan
+                const excelData = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+                const blob = new Blob([excelData], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+                const file = new File([blob], "Data_Undangan.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+
+                // Cek apakah perangkat mendukung Web Share API untuk file
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        files: [file],
+                        title: 'Data Undangan',
+                        text: 'Berikut file Excel data undangan klien.'
+                    });
+                    
+                    // Bersihkan form setelah sukses terkirim
+                    clearForm();
+                    showModal("Data berhasil dibagikan dan form telah dikosongkan untuk pengerjaan klien selanjutnya.");
+                } else {
+                    // Fallback jika dibuka di laptop/browser lama yang tidak support Web Share
+                    XLSX.writeFile(wb, "Data_Undangan.xlsx");
+                    clearForm();
+                    showModal("Browser Anda tidak mendukung kirim file langsung. File telah diunduh otomatis, silakan kirim manual ke WhatsApp. Form telah dikosongkan.");
+                }
             } catch (error) {
                 console.error(error);
-                showModal("Gagal menyimpan file Excel. Pastikan koneksi internet stabil.");
+                if (error.name !== 'AbortError') {
+                    showModal("Terjadi kesalahan saat memproses file Excel.");
+                }
             }
         }
 
@@ -629,7 +644,7 @@
                     }
 
                     if (importCount > 0) {
-                        saveToLocalStorage(); // Simpan hasil import ke cache
+                        saveToLocalStorage(); 
                         aturPosisiForm();
                         generateText();
                         showToast(`Berhasil mengimpor ${importCount} baris data!`);
@@ -723,7 +738,6 @@ ${document.getElementById('hormat').value.trim()}
 ${turutMengundangText}`;
         }
 
-        // Functions eksekusi Copy ke Clipboard
         function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
         function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
         function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
