@@ -308,9 +308,10 @@
 
                 <fieldset>
                     <legend>Penutup</legend>
+                    <p class="text-[10px] md:text-xs text-gray-500 italic mb-2">Pisahkan nama dengan menekan tombol Enter (baris baru).</p>
                     <div class="input-group mb-0">
                         <label class="input-label" for="hormat">Hormat Kami (Tuan Rumah)</label>
-                        <input type="text" id="hormat" class="input-field" value="" placeholder="Contoh: Bpk. Samsul & Ny Ruth">
+                        <textarea id="hormat" rows="3" class="input-field resize-none" placeholder="Bpk. Samsul & Ny Ruth&#10;Keluarga Besar Bpk. Ahmad"></textarea>
                     </div>
                 </fieldset>
 
@@ -793,11 +794,30 @@ async function sendPdfToWhatsApp() {
                     page.drawText(cleanLine, { x: margin, y: y, size: fontSize, font: font, color: rgb(0,0,0) });
                     y -= lineHeight;
                 }
-
-                // 4. Ubah ke bentuk File/Blob untuk dikirim
+              
+               // 4. Ubah ke bentuk File/Blob untuk dikirim
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                const fileName = "Data_Undangan.pdf";
+                
+                // Ambil data nama lengkap (bersihkan spasi di awal/akhir)
+                let wNamaLengkap = (data['wNama'] || '').trim();
+                let pNamaLengkap = (data['pNama'] || '').trim();
+
+                // Prioritaskan nama panggilan. Jika kosong, ambil kata pertama dari nama lengkap. Jika masih kosong, gunakan default
+                let namaWanita = (data['wPanggilan'] || '').trim() || (wNamaLengkap ? wNamaLengkap.split(' ')[0] : 'Wanita');
+                let namaPria = (data['pPanggilan'] || '').trim() || (pNamaLengkap ? pNamaLengkap.split(' ')[0] : 'Pria');
+                
+                let susunanMempelai = data['susunan'] || 'wanita';
+                
+                // Tentukan urutan nama berdasarkan pilihan susunan
+                let namaFileGabungan = susunanMempelai === 'pria' 
+                    ? `${namaPria}&${namaWanita}` 
+                    : `${namaWanita}&${namaPria}`;
+                
+                // Hapus spasi agar nama file lebih rapi
+                namaFileGabungan = namaFileGabungan.replace(/\s+/g, '');
+                
+                const fileName = `Data_Undangan_${namaFileGabungan}.pdf`;
                 const file = new File([blob], fileName, { type: "application/pdf" });
 
                 // 5. Eksekusi pengiriman (Web Share API)
