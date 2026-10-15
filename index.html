@@ -155,11 +155,9 @@
                 <label class="w-full bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     Import Data
-                    <!-- Ubah accept dan onchange di baris bawah ini -->
                     <input type="file" id="fileUpload" accept=".xlsx, .xls, .pdf" class="hidden" onchange="handleAutoImport(event)">
                 </label>
 
-                <!-- Tombol Kirim WA Diubah untuk File PDF -->
                 <button onclick="sendPdfToWhatsApp()" class="w-full bg-[#25D366]/80 hover:bg-[#25D366] text-white border border-[#25D366]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                     Kirim ke WA (PDF)
@@ -168,13 +166,22 @@
 
             <form id="invitationForm" onsubmit="event.preventDefault();">
                 <fieldset>
-                    <legend>Pengaturan Posisi</legend>
-                    <div class="input-group mb-0">
-                        <label class="input-label" for="susunan">Susunan Nama Lebih Dulu</label>
-                        <select id="susunan" class="input-field cursor-pointer" onchange="aturPosisiForm(); saveToLocalStorage();">
-                            <option value="wanita">Wanita Dulu (Mempelai Wanita di Atas)</option>
-                            <option value="pria">Pria Dulu (Mempelai Pria di Atas)</option>
-                        </select>
+                    <legend>Pengaturan Umum</legend>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-0">
+                        <div class="input-group mb-0">
+                            <label class="input-label" for="jenisUndangan">Jenis Undangan</label>
+                            <select id="jenisUndangan" class="input-field cursor-pointer" onchange="gantiJenisUndangan(); saveToLocalStorage();">
+                                <option value="muslim">Muslim</option>
+                                <option value="kristen">Kristen</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-0">
+                            <label class="input-label" for="susunan">Susunan Nama Mempelai</label>
+                            <select id="susunan" class="input-field cursor-pointer" onchange="aturPosisiForm(); saveToLocalStorage();">
+                                <option value="wanita">Nama Pria Lebih Dulu</option>
+                                <option value="pria">Nama Wanita Lebih Dulu</option>
+                            </select>
+                        </div>
                     </div>
                 </fieldset>
 
@@ -246,24 +253,24 @@
                         <input type="text" id="teksPengantarAcara" class="input-field" value="yang insyaa Allah akan dilaksanakan pada:">
                     </div>
 
-                    <div class="mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Akad Nikah</div>
+                    <div id="labelAkadUtama" class="mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Akad Nikah</div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
                         <div class="input-group">
-                            <label class="input-label" for="tanggalAkad">Hari & Tanggal Akad</label>
+                            <label id="lblTanggalAkad" class="input-label" for="tanggalAkad">Hari & Tanggal Akad</label>
                             <input type="text" id="tanggalAkad" class="input-field" value="" placeholder="Contoh: Minggu, 08 November 2026">
                         </div>
                         <div class="input-group">
-                            <label class="input-label" for="jamAkad">Waktu / Pukul Akad</label>
+                            <label id="lblJamAkad" class="input-label" for="jamAkad">Waktu / Pukul Akad</label>
                             <input type="text" id="jamAkad" class="input-field" value="" placeholder="Contoh: 10.00 Wita">
                         </div>
                     </div>
                     <div class="input-group">
-                        <label class="input-label" for="tempatAkad">Nama Tempat / Gedung Akad</label>
-                        <input type="text" id="tempatAkad" class="input-field" value="" placeholder="Contoh: Masjid Raya">
+                        <label id="lblTempatAkad" class="input-label" for="tempatAkad">Nama Tempat / Gedung Akad</label>
+                        <input type="text" id="tempatAkad" class="input-field" value="" placeholder="">
                     </div>
                     <div class="input-group mb-5">
-                        <label class="input-label" for="alamatAkad">Alamat Lengkap Akad</label>
-                        <textarea id="alamatAkad" rows="2" class="input-field resize-none" placeholder="Contoh: Jl. Masjid Raya, Bontoala, Kota Makassar"></textarea>
+                        <label id="lblAlamatAkad" class="input-label" for="alamatAkad">Alamat Lengkap Akad</label>
+                        <textarea id="alamatAkad" rows="2" class="input-field resize-none" placeholder=""></textarea>
                     </div>
 
                     <div class="mt-2 mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Resepsi</div>
@@ -375,9 +382,9 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
                     <div class="grid grid-cols-2 lg:grid-cols-3 gap-2 md:gap-3">
                         <button onclick="copyTurutMengundang()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Turut Mengundang</button>
-                        <button onclick="copyTanggalAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Akad (Full)</button>
-                        <button onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Akad</button>
-                        <button onclick="copyAlamatAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Akad</button>
+                        <button id="btnCopyTglAkad" onclick="copyTanggalAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Akad (Full)</button>
+                        <button id="btnCopyWaktuAkad" onclick="copyAkadTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Akad</button>
+                        <button id="btnCopyLokasiAkad" onclick="copyAlamatAkad()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Lokasi Akad</button>
                         
                         <button onclick="copyTanggalResepsi()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Tgl Resepsi (Full)</button>
                         <button onclick="copyResepsiTime()" class="bg-dark-700 hover:bg-dark-600 border border-gold-500/30 text-gold-300 py-2.5 md:py-2 px-1 rounded-lg transition-all duration-300 flex items-center justify-center text-center leading-tight text-[11px] md:text-xs active:scale-[0.98]">Salin Waktu Resepsi</button>
@@ -445,13 +452,46 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
     <script>
      const fieldIds = [
-            'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
+            'jenisUndangan', 'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
             'pNama', 'pPanggilan', 'pAnak', 'pBapak', 'pIbu', 
-            'teksPengantarAcara', // Tambahkan ID ini
+            'teksPengantarAcara', 
             'tanggalAkad', 'jamAkad', 'tempatAkad', 'alamatAkad', 
             'tanggalResepsi', 'jamResepsi', 'tempatResepsi', 'alamatResepsi', 'keteranganResepsi', 
             'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
         ];
+
+        function gantiJenisUndangan(resetText = true) {
+            const jenis = document.getElementById('jenisUndangan').value;
+            const lAkad = document.getElementById('labelAkadUtama');
+            
+            // Mengganti Label UI
+            if (lAkad) lAkad.textContent = (jenis === 'kristen') ? 'Pemberkatan' : 'Akad Nikah';
+            if (document.getElementById('lblTanggalAkad')) document.getElementById('lblTanggalAkad').textContent = (jenis === 'kristen') ? 'Hari & Tanggal Pemberkatan' : 'Hari & Tanggal Akad';
+            if (document.getElementById('lblJamAkad')) document.getElementById('lblJamAkad').textContent = (jenis === 'kristen') ? 'Waktu / Pukul Pemberkatan' : 'Waktu / Pukul Akad';
+            if (document.getElementById('lblTempatAkad')) document.getElementById('lblTempatAkad').textContent = (jenis === 'kristen') ? 'Nama Tempat / Gedung Pemberkatan' : 'Nama Tempat / Gedung Akad';
+            if (document.getElementById('lblAlamatAkad')) document.getElementById('lblAlamatAkad').textContent = (jenis === 'kristen') ? 'Alamat Lengkap Pemberkatan' : 'Alamat Lengkap Akad';
+            if (document.getElementById('btnCopyTglAkad')) document.getElementById('btnCopyTglAkad').textContent = (jenis === 'kristen') ? 'Salin Tgl Pemberkatan' : 'Salin Tgl Akad (Full)';
+            if (document.getElementById('btnCopyWaktuAkad')) document.getElementById('btnCopyWaktuAkad').textContent = (jenis === 'kristen') ? 'Salin Waktu Pemberkatan' : 'Salin Waktu Akad';
+            if (document.getElementById('btnCopyLokasiAkad')) document.getElementById('btnCopyLokasiAkad').textContent = (jenis === 'kristen') ? 'Salin Lokasi Pemberkatan' : 'Salin Lokasi Akad';
+
+            // Mengganti Otomatis Teks Default Pembuka, Penutup, dan Pengantar
+            if (resetText) {
+                const tPembuka = document.getElementById('teksPembuka');
+                const tPenutup = document.getElementById('teksPenutup');
+                const tPengantar = document.getElementById('teksPengantarAcara');
+                
+                if (jenis === 'kristen') {
+                    tPembuka.value = `Tuhan menjadikan segala sesuatu indah pada waktunya,\nindah pada saat Dia mempertemukan, indah saat Dia menumbuhkan kasih\ndan indah pada saat dia mempersatukan putra-putri kami\ndalam ikatan Pernikahan Kudus`;
+                    tPenutup.value = `Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila\nBapak/ibu/Saudara(i) berkenan hadir dan memberikan doa restu kepada kedua mempelai. Atas kehadirannya kami ucapkan terima kasih.`;
+                    tPengantar.value = `Dengan penuh rasa syukur atas kasih Anugerah Tuhan,\nkami mengundang Bapak/Ibu/Saudara(i) kiranya menghadiri\nacara pernikahan anak kami yang akan dilaksanakan pada:`;
+                } else {
+                    tPembuka.value = `Bismillahirrahmanirrahim\nAssalamu'alaikum Warahmatullahi Wabarakatuh\nDengan memohon rahmat dan ridha Allah Subhanahu Wa Ta'ala,\nkami mengundang Bapak/Ibu/Saudara/i untuk menghadiri\nacara pernikahan putra-putri kami:`;
+                    tPenutup.value = `Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i\nberkenan hadir dan memberikan doa restu kepada kedua mempelai.\nAtas kehadirannya kami ucapkan terimakasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh`;
+                    tPengantar.value = `yang insyaa Allah akan dilaksanakan pada:`;
+                }
+            }
+            generateText();
+        }
 
         function saveToLocalStorage() {
             const data = {};
@@ -584,6 +624,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 if (importCount > 0) {
                     saveToLocalStorage(); 
                     aturPosisiForm();
+                    if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
                     generateText();
                     showToast(`Berhasil memulihkan data dari PDF!`);
                 } else {
@@ -600,11 +641,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 const el = document.getElementById(id);
                 if (el) {
                     if (id === 'susunan') el.value = 'wanita';
+                    else if (id === 'jenisUndangan') el.value = 'muslim';
                     else el.value = '';
                 }
             });
             localStorage.removeItem('invitationData');
             aturPosisiForm();
+            gantiJenisUndangan(true);
             generateText();
         }
 
@@ -631,6 +674,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         document.addEventListener('DOMContentLoaded', () => {
             loadFromLocalStorage();
             aturPosisiForm();
+            if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
             generateText();
 
             const inputs = document.querySelectorAll('input, select, textarea');
@@ -831,8 +875,10 @@ async function sendPdfToWhatsApp() {
 
             const teksPembuka = document.getElementById('teksPembuka').value;
             const teksPenutup = document.getElementById('teksPenutup').value;
-            // Ambil nilai teks pengantar acara
             const teksPengantarAcara = document.getElementById('teksPengantarAcara').value; 
+            
+            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
+            const judulAkad = (jenis === 'kristen') ? 'PEMBERKATAN' : 'AKAD NIKAH';
 
             document.getElementById('previewText').value = `${teksPembuka}
 
@@ -844,7 +890,7 @@ ${block2}
 
 ${teksPengantarAcara}
 
-AKAD NIKAH
+${judulAkad}
 Hari/Tanggal: ${document.getElementById('tanggalAkad').value.trim()}
 ${jamAkadText}
 Bertempat di
@@ -868,7 +914,10 @@ ${turutMengundangText}`;
         function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
         function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
         function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
-        function copyTanggalAkad() { executeCopy(document.getElementById('tanggalAkad').value.trim(), "Tanggal Akad berhasil disalin!"); }
+        function copyTanggalAkad() { 
+            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
+            executeCopy(document.getElementById('tanggalAkad').value.trim(), `Tanggal ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
+        }
         function copyTanggalResepsi() { executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); }
         
         function parseDateString(dateString) {
@@ -879,7 +928,10 @@ ${turutMengundangText}`;
         function copyResepsiBulanSaja() { const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); if(p) executeCopy(p.bulan, "Bulan disalin!"); else showModal("Format tanggal tidak valid."); }
         function copyResepsiTahunSaja() { const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); if(p) executeCopy(p.tahun, "Tahun disalin!"); else showModal("Format tanggal tidak valid."); }
         
-        function copyAlamatAkad() { executeCopy(`Bertempat di\n${document.getElementById('tempatAkad').value.trim()}\n${document.getElementById('alamatAkad').value.trim()}`, "Alamat Akad berhasil disalin!"); }
+        function copyAlamatAkad() { 
+            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
+            executeCopy(`Bertempat di\n${document.getElementById('tempatAkad').value.trim()}\n${document.getElementById('alamatAkad').value.trim()}`, `Alamat ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
+        }
         function copyAlamatResepsi() { executeCopy(`Bertempat di\n${document.getElementById('tempatResepsi').value.trim()}\n${document.getElementById('alamatResepsi').value.trim()}`, "Alamat Resepsi berhasil disalin!"); }
         function copyKeteranganResepsi() { const ket = document.getElementById('keteranganResepsi').value.trim(); if(ket) executeCopy(ket, "Keterangan resepsi disalin!"); else showModal("Kolom Keterangan masih kosong."); }
         
@@ -889,7 +941,13 @@ ${turutMengundangText}`;
             else executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'), "Daftar Turut Mengundang disalin!");
         }
         function copyHostName() { executeCopy(document.getElementById('hormat').value.trim(), "Nama yang mengundang disalin!"); }
-        function copyAkadTime() { const j = document.getElementById('jamAkad').value.trim(); if(!j){showModal("Waktu akad kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu akad disalin!"); }
+        function copyAkadTime() { 
+            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
+            const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
+            const j = document.getElementById('jamAkad').value.trim(); 
+            if(!j){showModal(`Waktu ${label.toLowerCase()} kosong.`); return;} 
+            executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, `Waktu ${label.toLowerCase()} disalin!`); 
+        }
         function copyResepsiTime() { const j = document.getElementById('jamResepsi').value.trim(); if(!j){showModal("Waktu resepsi kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu resepsi disalin!"); }
 
         function executeCopy(textToCopy, successMsg) {
