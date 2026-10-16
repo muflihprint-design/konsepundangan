@@ -4,9 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generator Teks Undangan Pernikahan</title>
+    
+    <!-- Supabase SDK & Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -142,7 +146,7 @@
         <!-- ================= KIRI: FORM PENGISIAN ================= -->
         <div id="formSection" class="w-full lg:w-1/2 space-y-2 relative">
             <p class="text-xs md:text-sm text-gray-400 mb-4 md:mb-6 leading-relaxed">
-                <span class="font-semibold text-gold-300">Auto-Save Aktif:</span> Data Anda akan otomatis tersimpan walau halaman dimuat ulang.
+                <span class="font-semibold text-gold-300">Auto-Save Aktif:</span> Data otomatis disinkronisasi saat Anda mengetik dan berpindah kolom.
             </p>
             
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-6">
@@ -288,18 +292,15 @@
 
                     <div class="mt-2 mb-3 text-gold-500 font-serif border-b border-gold-500/20 pb-1 text-sm md:text-base">Resepsi</div>
                     
-                    <!-- Flex container dinamis untuk mengatur urutan keterangan resepsi -->
                     <div class="flex flex-col relative gap-3 md:gap-4">
                         <div class="order-1 input-group mb-0">
                             <label class="input-label" for="tanggalResepsi">Hari & Tanggal Resepsi</label>
                             <input type="text" id="tanggalResepsi" class="input-field" value="" placeholder="Contoh: Sabtu, 03 Juli 2026">
                         </div>
 
-                        <!-- Kolom Keterangan Tambahan (Posisinya bisa bergeser 1-4) -->
                         <div id="wrapKet" class="order-4 input-group mb-0 transition-all duration-300">
                             <div class="flex justify-between items-center mb-1">
                                 <label class="input-label mb-0" for="keteranganResepsi">Keterangan Tambahan Resepsi</label>
-                                <!-- Tombol Panah Atas Bawah -->
                                 <div class="flex gap-1.5 items-center">
                                     <button type="button" onclick="moveKet(-1)" class="bg-dark-700 hover:bg-gold-500/20 p-1 rounded text-gray-400 hover:text-gold-500 transition-colors" title="Pindahkan posisi keterangan ini ke atas">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
@@ -372,7 +373,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         <!-- ================= KANAN: PREVIEW & TOMBOL SALIN ================= -->
         <div class="w-full lg:w-1/2 mt-4 lg:mt-0 flex flex-col gap-6 lg:gap-8">
             
-            <!-- BLOK 1: Kotak Live Preview Teks -->
             <div id="previewBox" class="bg-dark-800 p-1 md:p-1.5 rounded-xl border border-gold-500/30 shadow-2xl">
                 <div class="bg-dark-900 rounded-lg p-4 md:p-6 flex flex-col relative">
                     <div class="flex justify-between items-center mb-4">
@@ -388,7 +388,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 </div>
             </div>
 
-            <!-- BLOK 2: Kotak Tombol Salin -->
             <div id="copySection" class="bg-dark-800 p-4 md:p-6 rounded-xl border border-gold-500/30 shadow-2xl">
                 <h2 class="text-gold-500 font-serif text-lg md:text-xl flex items-center gap-2 mb-4 border-b border-gold-500/20 pb-2">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
@@ -406,7 +405,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                         Salin Nama File Corel
                     </button>
                     
-                    <!-- Kelompok: Nama -->
                     <div id="copyButtonsContainer" class="flex flex-col gap-2 md:gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Nama Pengantin dan Ortu</h3>
                         <div id="btnGroupMempelai" class="flex flex-col gap-2 md:gap-3">
@@ -422,7 +420,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                         </div>
                     </div>
 
-                    <!-- Kelompok: Akad -->
                     <div class="flex flex-col gap-2 md:gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Akad</h3>
                         <div class="grid grid-cols-2 gap-2 md:gap-3">
@@ -435,7 +432,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                         </div>
                     </div>
 
-                    <!-- Kelompok: Resepsi -->
                     <div class="flex flex-col gap-2 md:gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Resepsi</h3>
                         <div class="grid grid-cols-2 gap-2 md:gap-3">
@@ -453,7 +449,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                         </div>
                     </div>
 
-                    <!-- Kelompok: Nama yang mengundang -->
                     <div class="flex flex-col gap-2 md:gap-3">
                         <h3 class="text-gold-500 font-serif text-sm border-b border-gold-500/20 pb-1 mt-2">Nama yang Mengundang</h3>
                         <div class="grid grid-cols-2 gap-2 md:gap-3">
@@ -467,38 +462,20 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         </div>
     </main>
 
-    <!-- ================= 3 TOMBOL MENGAMBANG (FAB) KHUSUS MOBILE ================= -->
+    <!-- FAB MOBILE -->
     <div class="lg:hidden fixed bottom-6 right-4 z-40 flex flex-col gap-3">
-        <!-- Tombol Edit (Ke Atas / Form) -->
         <button onclick="document.getElementById('formSection').scrollIntoView({behavior: 'smooth'})" class="bg-blue-600 hover:bg-blue-500 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition-transform active:scale-90" title="Edit Form">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
         </button>
-
-        <!-- Tombol Preview Teks -->
         <button onclick="document.getElementById('previewBox').scrollIntoView({behavior: 'smooth', block: 'start'})" class="bg-purple-600 hover:bg-purple-500 text-white p-3.5 rounded-full shadow-lg flex items-center justify-center transition-transform active:scale-90" title="Lihat Hasil">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         </button>
-
-        <!-- Tombol Salin -->
         <button onclick="document.getElementById('copySection').scrollIntoView({behavior: 'smooth', block: 'center'})" class="bg-gold-500 hover:bg-gold-400 text-black p-3.5 rounded-full shadow-[0_0_15px_rgba(212,175,55,0.4)] flex items-center justify-center transition-transform active:scale-90" title="Salin Teks">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         </button>
     </div>
 
     <!-- Modal & Toast -->
-    <div id="customAlertModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-dark-800 border border-gold-500/30 rounded-xl p-6 max-w-sm w-full shadow-2xl transform transition-all">
-            <h3 class="text-gold-500 font-serif text-xl mb-2 flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                Pemberitahuan
-            </h3>
-            <p id="customAlertMessage" class="text-gray-300 text-sm mb-6 leading-relaxed"></p>
-            <button onclick="closeCustomAlert()" class="w-full bg-gold-600 hover:bg-gold-500 text-black font-semibold py-2.5 px-4 rounded-lg transition-colors">
-                Mengerti
-            </button>
-        </div>
-    </div>
-
     <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-full shadow-2xl flex items-center gap-2 md:gap-3 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
         <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
@@ -535,6 +512,12 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
     </div>
 
     <script>
+        // ================= INSTANSIASI SUPABASE =================
+        const { createClient } = supabase;
+        const SUPABASE_URL = "https://qnnacckoyfzrmvobwccb.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubmFjY2tveWZ6cm12b2J3Y2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwOTIxNTEsImV4cCI6MjEwNzY2ODE1MX0.XbLOSpq1ylDjkxrDqoQBJIFAZp6RhsDiCiXn6kF9NjA";
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+
         // DAFTAR FIELD 
         const fieldIds = [
             'kodeUndangan', 'jumlahUndangan',
@@ -546,7 +529,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
         ];
 
-        // Daftar Nama Field (Untuk Ditampilkan di Peringatan)
         const fieldNamesDisplay = {
             'jumlahUndangan': 'Jumlah Undangan',
             'wNama': 'Nama Lengkap & Gelar (Wanita)',
@@ -575,8 +557,58 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'teksPengantarAcara': 'Teks Pengantar Acara'
         };
 
+        // --- SISTEM PELACAKAN DATA UNTUK DIRTY CHECKING & AUTO-SAVE SUPABASE ---
+        let lastSavedData = {}; 
+        
+        function generateUUID() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        let supabaseSessionId = localStorage.getItem('supabaseSessionId');
+        if (!supabaseSessionId) {
+            supabaseSessionId = generateUUID();
+            localStorage.setItem('supabaseSessionId', supabaseSessionId);
+        }
+
+        async function saveToSupabaseSilently() {
+            const currentData = {};
+            let isChanged = false;
+
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    currentData[id] = el.value;
+                    if (currentData[id] !== lastSavedData[id]) {
+                        isChanged = true;
+                    }
+                }
+            });
+
+            if (!isChanged) return;
+
+            // Simpan jejak agar tidak spam update
+            lastSavedData = { ...currentData };
+
+            try {
+                const payload = {
+                    session_id: supabaseSessionId,
+                    ...currentData,
+                    updated_at: new Date().toISOString()
+                };
+                
+                await supabaseClient
+                    .from('data_undangan')
+                    .upsert(payload, { onConflict: 'session_id' });
+                
+            } catch (error) {
+                console.error("Gagal auto-save ke Supabase:", error);
+            }
+        }
+
         // --- MANAJEMEN POSISI KETERANGAN ---
-        // 1=Atas Waktu, 2=Bawah Waktu, 3=Bawah Tempat, 4=Bawah Alamat
         let ketOrderIndex = parseInt(localStorage.getItem('ketOrderIndex')) || 2; 
 
         function moveKet(dir) {
@@ -587,6 +619,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             updateKetDOM();
             localStorage.setItem('ketOrderIndex', ketOrderIndex);
             generateText();
+            saveToSupabaseSilently();
         }
 
         function updateKetDOM() {
@@ -650,9 +683,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                             el.value = data[id];
                         }
                     });
-                } catch (e) {
-                    console.error("Error membaca memori data", e);
-                }
+                } catch (e) {}
             }
         }
 
@@ -665,7 +696,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             if (fileName.endsWith('.pdf')) {
                 await processPdfImport(file);
             } else if (fileName.endsWith('.xlsx') || fileName.endsWith('.xls')) {
-                processExcelImport(file);
+                await processExcelImport(file);
             } else {
                 showModal("Format file tidak didukung. Harap unggah file Excel (.xlsx/.xls) atau PDF.");
             }
@@ -673,60 +704,74 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             event.target.value = "";
         }
 
-        function processExcelImport(file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {type: 'array'});
-                    const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
-                    
-                    if (rows.length < 2) { showModal("File Excel kosong atau format tidak sesuai."); return; }
+        // Helper untuk me-resolve filereader sbg Promise
+        function readExcelFile(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(new Uint8Array(e.target.result));
+                reader.onerror = e => reject(e);
+                reader.readAsArrayBuffer(file);
+            });
+        }
 
-                    const fieldMap = {
-                        "Susunan Nama (wanita/pria)": "susunan", "Wanita - Nama Lengkap": "wNama", "Wanita - Nama Panggilan": "wPanggilan", "Wanita - Anak Ke-": "wAnak", "Wanita - Nama Bapak": "wBapak", "Wanita - Nama Ibu": "wIbu",
-                        "Pria - Nama Lengkap": "pNama", "Pria - Nama Panggilan": "pPanggilan", "Pria - Anak Ke-": "pAnak", "Pria - Nama Bapak": "pBapak", "Pria - Nama Ibu": "pIbu",
-                        "Hari & Tanggal Akad": "tanggalAkad", "Waktu Akad": "jamAkad", "Tempat Akad": "tempatAkad", "Alamat Lengkap Akad": "alamatAkad",
-                        "Hari & Tanggal Resepsi": "tanggalResepsi", "Waktu Resepsi": "jamResepsi", "Tempat Resepsi": "tempatResepsi", "Alamat Lengkap Resepsi": "alamatResepsi", "Keterangan Tambahan Resepsi": "keteranganResepsi",
-                        "Turut Mengundang": "turutMengundang", "Hormat Kami (Tuan Rumah)": "hormat"
-                    };
+        async function processExcelImport(file) {
+            try {
+                const data = await readExcelFile(file);
+                const workbook = XLSX.read(data, {type: 'array'});
+                const rows = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], {header: 1});
+                
+                if (rows.length < 2) { showModal("File Excel kosong atau format tidak sesuai."); return; }
 
-                    let importCount = 0;
-                    for (let i = 1; i < rows.length; i++) {
-                        if (rows[i] && rows[i].length >= 2) {
-                            const fieldName = rows[i][0];
-                            const value = rows[i][1];
-                            const targetId = fieldMap[fieldName];
-                            if (targetId && value !== undefined) {
-                                const inputEl = document.getElementById(targetId);
-                                if (inputEl) {
-                                    if (targetId === "susunan") {
-                                        let valLower = String(value).toLowerCase().replace(/\s+/g, '');
-                                        inputEl.value = (valLower.includes("pria")) ? "pria" : "wanita";
-                                    } else if (targetId === "turutMengundang") {
-                                        inputEl.value = String(value).replace(/, /g, '\n').replace(/,/g, '\n');
-                                    } else {
-                                        inputEl.value = value;
-                                    }
-                                    importCount++;
+                const fieldMap = {
+                    "Susunan Nama (wanita/pria)": "susunan", "Wanita - Nama Lengkap": "wNama", "Wanita - Nama Panggilan": "wPanggilan", "Wanita - Anak Ke-": "wAnak", "Wanita - Nama Bapak": "wBapak", "Wanita - Nama Ibu": "wIbu",
+                    "Pria - Nama Lengkap": "pNama", "Pria - Nama Panggilan": "pPanggilan", "Pria - Anak Ke-": "pAnak", "Pria - Nama Bapak": "pBapak", "Pria - Nama Ibu": "pIbu",
+                    "Hari & Tanggal Akad": "tanggalAkad", "Waktu Akad": "jamAkad", "Tempat Akad": "tempatAkad", "Alamat Lengkap Akad": "alamatAkad",
+                    "Hari & Tanggal Resepsi": "tanggalResepsi", "Waktu Resepsi": "jamResepsi", "Tempat Resepsi": "tempatResepsi", "Alamat Lengkap Resepsi": "alamatResepsi", "Keterangan Tambahan Resepsi": "keteranganResepsi",
+                    "Turut Mengundang": "turutMengundang", "Hormat Kami (Tuan Rumah)": "hormat"
+                };
+
+                let importCount = 0;
+                for (let i = 1; i < rows.length; i++) {
+                    if (rows[i] && rows[i].length >= 2) {
+                        const fieldName = rows[i][0];
+                        const value = rows[i][1];
+                        const targetId = fieldMap[fieldName];
+                        if (targetId && value !== undefined) {
+                            const inputEl = document.getElementById(targetId);
+                            if (inputEl) {
+                                if (targetId === "susunan") {
+                                    let valLower = String(value).toLowerCase().replace(/\s+/g, '');
+                                    inputEl.value = (valLower.includes("pria")) ? "pria" : "wanita";
+                                } else if (targetId === "turutMengundang") {
+                                    inputEl.value = String(value).replace(/, /g, '\n').replace(/,/g, '\n');
+                                } else {
+                                    inputEl.value = value;
                                 }
+                                importCount++;
                             }
                         }
                     }
-
-                    if (importCount > 0) {
-                        saveToLocalStorage(); 
-                        aturPosisiForm();
-                        generateText();
-                        showToast(`Berhasil mengimpor ${importCount} baris data dari Excel!`);
-                    } else {
-                        showModal("Tidak ada data yang cocok. Pastikan Blangko benar.");
-                    }
-                } catch (error) {
-                    showModal("Terjadi kesalahan saat membaca file Excel.");
                 }
-            };
-            reader.readAsArrayBuffer(file);
+
+                if (importCount > 0) {
+                    // Karena ini diimpor dari Excel, kita anggap sebagai data baru (Generate ID Sesi baru)
+                    supabaseSessionId = generateUUID();
+                    localStorage.setItem('supabaseSessionId', supabaseSessionId);
+                    
+                    // Reset cache dirty-checker agar seluruh data di-push penuh ke DB
+                    lastSavedData = {};
+
+                    saveToLocalStorage(); 
+                    aturPosisiForm();
+                    generateText();
+                    await saveToSupabaseSilently(); // Push ke DB sbg INSERT baru
+                    showToast(`Berhasil mengimpor ${importCount} baris data dari Excel!`);
+                } else {
+                    showModal("Tidak ada data yang cocok. Pastikan Blangko benar.");
+                }
+            } catch (error) {
+                showModal("Terjadi kesalahan saat membaca file Excel.");
+            }
         }
 
         async function processPdfImport(file) {
@@ -754,16 +799,29 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 });
                 
                 if (importCount > 0) {
+                    // Jika file PDF sudah menyimpan Session ID (dari sistem ini), pakai ID tersebut agar menimpa
+                    // Jika tidak (PDF Lama tanpa ID Sesi), anggap sebagai data baru.
+                    if (data.supabaseSessionId) {
+                        supabaseSessionId = data.supabaseSessionId;
+                        localStorage.setItem('supabaseSessionId', supabaseSessionId);
+                    } else {
+                        supabaseSessionId = generateUUID();
+                        localStorage.setItem('supabaseSessionId', supabaseSessionId);
+                    }
+                    
+                    // Reset cache dirty-checker agar seluruh data di-push penuh
+                    lastSavedData = {};
+
                     saveToLocalStorage(); 
                     aturPosisiForm();
                     if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
                     generateText();
+                    await saveToSupabaseSilently(); // Push to DB
                     showToast(`Berhasil memulihkan data dari PDF!`);
                 } else {
                     showModal("Data di dalam PDF kosong.");
                 }
             } catch (error) {
-                console.error(error);
                 showModal("Gagal membaca file PDF. Pastikan file tidak rusak atau formatnya sesuai.");
             }
         }
@@ -779,9 +837,14 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             });
             localStorage.removeItem('invitationData');
             
-            ketOrderIndex = 2; // Reset ke posisi default (bawah waktu)
+            ketOrderIndex = 2; // Reset ke posisi default
             updateKetDOM();
             localStorage.setItem('ketOrderIndex', ketOrderIndex);
+
+            // Buka session baru di Supabase (krn ini pelanggan baru / formulir kosong)
+            supabaseSessionId = generateUUID();
+            localStorage.setItem('supabaseSessionId', supabaseSessionId);
+            lastSavedData = {}; // Clear tracker
 
             aturPosisiForm();
             gantiJenisUndangan(true);
@@ -821,18 +884,28 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
             generateText();
 
+            // Inisialisasi pelacakan Supabase pertama kali halaman dimuat
+            fieldIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) lastSavedData[id] = el.value;
+            });
+
             const inputs = document.querySelectorAll('input, select, textarea');
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
                     generateText();
                     saveToLocalStorage();
                 });
+                
+                // Memicu sinkronisasi ke Supabase saat meninggalkan form field
+                input.addEventListener('blur', () => {
+                    saveToSupabaseSilently();
+                });
             });
         });
 
         function angkaKeUrutan(inputStr) {
             const strTanpaSpasi = inputStr.replace(/\s+/g, '');
-            
             if (/^\d+$/.test(strTanpaSpasi)) {
                 const angka = parseInt(strTanpaSpasi);
                 const urutan = {1: 'pertama', 2: 'kedua', 3: 'ketiga', 4: 'keempat', 5: 'kelima', 6: 'keenam', 7: 'ketujuh', 8: 'kedelapan', 9: 'kesembilan', 10: 'kesepuluh'};
@@ -889,16 +962,14 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 XLSX.writeFile(wb, "Blangko_Data_Undangan.xlsx");
                 showToast("Blangko Excel berhasil diunduh!");
             } catch (error) {
-                showModal("Gagal membuat file Excel. Pastikan koneksi internet stabil.");
+                showModal("Gagal membuat file Excel.");
             }
         }
         
-        // --- FUNGSI VALIDASI SEBELUM KIRIM PDF ---
         function trySendPdf() {
             let emptyFields = [];
             
             for (let id of fieldIds) {
-                // Lewati Validasi Kode Undangan, Jenis, dan Susunan
                 if (id === 'kodeUndangan' || id === 'jenisUndangan' || id === 'susunan') continue;
                 
                 const el = document.getElementById(id);
@@ -953,6 +1024,9 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                     const el = document.getElementById(id);
                     if(el) data[id] = el.value;
                 });
+                // Sisipkan Session ID agar jika File PDF diimport di perangkat lain, 
+                // Sistem tahu bahwa ini berasal dari sesi DB yang sama
+                data['supabaseSessionId'] = supabaseSessionId;
                 
                 pdfDoc.setSubject(JSON.stringify(data));
                 pdfDoc.setTitle("Data Undangan - " + (data['wPanggilan'] || 'Mempelai'));
@@ -1018,10 +1092,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                     showModal("Browser Anda tidak mendukung share langsung. File PDF telah diunduh, silakan kirim manual ke WA. Form dikosongkan.");
                 }
             } catch (error) {
-                console.error(error);
-                if (error.name !== 'AbortError') {
-                    showModal("Terjadi kesalahan saat memproses file PDF.");
-                }
+                showModal("Terjadi kesalahan saat memproses file PDF.");
             }
         }
 
@@ -1127,7 +1198,6 @@ ${turutMengundangText}`;
             const tglHariIni = `${yyyy}.${mm}.${dd}`;
 
             const kode = document.getElementById('kodeUndangan').value.trim() || 'KODE';
-            
             const panggilW = (document.getElementById('wPanggilan').value.trim() || 'Wanita').replace(/\s+/g, '');
             const panggilP = (document.getElementById('pPanggilan').value.trim() || 'Pria').replace(/\s+/g, '');
             
@@ -1144,32 +1214,23 @@ ${turutMengundangText}`;
         function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
         function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
         function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
-        
         function copyTanggalAkad() { 
             const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
             executeCopy(document.getElementById('tanggalAkad').value.trim(), `Tanggal ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
         }
-        
-        function copyTanggalResepsi() { 
-            executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); 
-        }
+        function copyTanggalResepsi() { executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); }
 
         function copyHariResepsi() {
             let tgl = document.getElementById('tanggalResepsi').value.trim();
             let hari = tgl.split(',')[0].trim();
-            
-            if (hari) {
-                executeCopy(hari, "Hari Resepsi berhasil disalin!");
-            } else {
-                showModal("Format hari resepsi tidak ditemukan.");
-            }
+            if (hari) executeCopy(hari, "Hari Resepsi berhasil disalin!");
+            else showModal("Format hari resepsi tidak ditemukan.");
         }
         
         function parseDateString(dateString) {
             const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
             return match ? {tanggal: match[1], bulan: match[2], tahun: match[3]} : null;
         }
-        
         function copyResepsiTanggalSaja() { 
             const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); 
             if(p) executeCopy(p.tanggal, "Tanggal (Angka) disalin!"); 
@@ -1185,20 +1246,14 @@ ${turutMengundangText}`;
             const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
             const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
             
-            if (!combined) {
-                showModal(`Tanggal dan Waktu ${label.toLowerCase()} kosong.`);
-                return;
-            }
+            if (!combined) { showModal(`Tanggal dan Waktu ${label.toLowerCase()} kosong.`); return; }
             executeCopy(combined, `Tanggal & Waktu ${label} disalin!`);
         }
 
         function copyResepsiBulanTahun() {
             const p = parseDateString(document.getElementById('tanggalResepsi').value.trim());
-            if (p) {
-                executeCopy(`${p.bulan}\n${p.tahun}`, "Bulan & Tahun Resepsi disalin!");
-            } else {
-                showModal("Format tanggal resepsi tidak valid.");
-            }
+            if (p) executeCopy(`${p.bulan}\n${p.tahun}`, "Bulan & Tahun Resepsi disalin!");
+            else showModal("Format tanggal resepsi tidak valid.");
         }
 
         function copyAlamatAkad() { 
@@ -1207,7 +1262,6 @@ ${turutMengundangText}`;
         }
         function copyAlamatResepsi() { executeCopy(`Bertempat di\n${document.getElementById('tempatResepsi').value.trim()}\n${document.getElementById('alamatResepsi').value.trim()}`, "Alamat Resepsi berhasil disalin!"); }
         function copyKeteranganResepsi() { const ket = document.getElementById('keteranganResepsi').value.trim(); if(ket) executeCopy(ket, "Keterangan resepsi disalin!"); else showModal("Kolom Keterangan masih kosong."); }
-        
         function copyTurutMengundang() {
             const lines = document.getElementById('turutMengundang').value.split('\n').filter(l => l.trim() !== '');
             if(lines.length === 0) showModal("Belum ada nama Pengundang.");
