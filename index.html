@@ -11,6 +11,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
     
+    <!-- Library QR Code -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -46,128 +49,93 @@
             scroll-behavior: smooth;
         }
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1a1a1e; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #d4af37; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #aa8c2c; 
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a1e; }
+        ::-webkit-scrollbar-thumb { background: #d4af37; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #aa8c2c; }
 
-        .input-group {
-            position: relative;
-        }
-
+        .input-group { position: relative; }
         .input-field {
-            width: 100%;
-            background-color: #27272c;
-            color: #ffffff;
-            border: 1px solid #3f3f46;
-            border-radius: 0.375rem;
-            padding: 0.75rem 1rem;
-            font-family: "Inter", sans-serif;
-            font-size: 0.875rem;
-            transition: all 0.2s ease-in-out;
+            width: 100%; background-color: #27272c; color: #ffffff;
+            border: 1px solid #3f3f46; border-radius: 0.375rem;
+            padding: 0.75rem 1rem; font-family: "Inter", sans-serif;
+            font-size: 0.875rem; transition: all 0.2s ease-in-out;
         }
-
         .input-field:focus {
-            outline: none;
-            border-color: #d4af37;
-            box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
+            outline: none; border-color: #d4af37; box-shadow: 0 0 0 1px rgba(212, 175, 55, 0.5);
         }
-
         .input-label {
-            display: block;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #9ca3af;
-            margin-bottom: 0.25rem;
-            font-weight: 500;
+            display: block; font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: #9ca3af; margin-bottom: 0.25rem; font-weight: 500;
         }
-        
         fieldset {
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            background-color: #1a1a1e;
+            border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 0.5rem;
+            padding: 1rem; margin-bottom: 1.5rem; background-color: #1a1a1e;
         }
-        @media (min-width: 768px) {
-            fieldset {
-                padding: 1.5rem; 
-            }
-        }
-
+        @media (min-width: 768px) { fieldset { padding: 1.5rem; } }
         legend {
-            font-family: "Playfair Display", serif;
-            color: #d4af37;
-            padding: 0 0.5rem;
-            font-size: 1.1rem;
-            font-style: italic;
+            font-family: "Playfair Display", serif; color: #d4af37;
+            padding: 0 0.5rem; font-size: 1.1rem; font-style: italic;
         }
-        @media (min-width: 768px) {
-            legend {
-                font-size: 1.25rem;
-                padding: 0 0.75rem;
-            }
-        }
+        @media (min-width: 768px) { legend { font-size: 1.25rem; padding: 0 0.75rem; } }
 
-        .toast-enter {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        .toast-exit {
-            transform: translateY(100%);
-            opacity: 0;
-        }
+        .toast-enter { transform: translateY(0); opacity: 1; }
+        .toast-exit { transform: translateY(100%); opacity: 0; }
     </style>
 </head>
 <body class="min-h-screen relative pb-24 lg:pb-8">
 
-    <header class="bg-dark-800 border-b border-gold-500/20 py-5 md:py-6 sticky top-0 z-20 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 md:px-8 flex justify-between items-center">
+    <header class="bg-dark-800 border-b border-gold-500/20 py-4 md:py-5 sticky top-0 z-20 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
             <div>
                 <h1 class="text-xl md:text-3xl font-serif text-gold-500">Royal Invitation Text</h1>
                 <p class="text-[10px] md:text-sm text-gray-400 mt-1">Generator Format Pesan WhatsApp Pernikahan</p>
+            </div>
+            
+            <!-- Auth Container untuk tombol Login/Logout -->
+            <div id="authContainer" class="w-full md:w-auto flex flex-row justify-end items-center gap-3 bg-dark-900/50 p-2 md:p-2.5 rounded-lg border border-gold-500/10 min-w-[150px]">
+                <!-- Dirender oleh fungsi JS renderAuth() -->
             </div>
         </div>
     </header>
 
     <main class="max-w-7xl mx-auto px-4 md:px-8 py-6 md:py-8 flex flex-col lg:flex-row gap-6 lg:gap-8">
         
-        <!-- ================= KIRI: FORM PENGISIAN ================= -->
         <div id="formSection" class="w-full lg:w-1/2 space-y-2 relative">
             <p class="text-xs md:text-sm text-gray-400 mb-4 md:mb-6 leading-relaxed">
                 <span class="font-semibold text-gold-300">Auto-Save Aktif:</span> Data otomatis disinkronisasi saat Anda mengetik dan berpindah kolom.
             </p>
             
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3 mb-6">
-                <button onclick="downloadTemplate()" class="w-full bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 mb-6">
+                <button onclick="downloadTemplate()" class="w-full bg-green-700/80 hover:bg-green-600 text-white border border-green-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex flex-col items-center justify-center gap-1 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Blangko Kosong
+                    <span class="text-[10px] font-semibold leading-tight">Blangko</span>
                 </button>
 
-                <label class="w-full bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer active:scale-95">
+                <label class="w-full bg-blue-700/80 hover:bg-blue-600 text-white border border-blue-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex flex-col items-center justify-center gap-1 cursor-pointer active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2-2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Import Data
+                    <span class="text-[10px] font-semibold leading-tight">Import Data</span>
                     <input type="file" id="fileUpload" accept=".xlsx, .xls, .pdf" class="hidden" onchange="handleAutoImport(event)">
                 </label>
 
-                <button onclick="trySendPdf()" class="w-full bg-[#25D366]/80 hover:bg-[#25D366] text-white border border-[#25D366]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex items-center justify-center gap-2 active:scale-95">
+                <button id="btnUploadDrive" onclick="uploadPdfToDrive()" class="w-full bg-[#4285F4]/80 hover:bg-[#4285F4] text-white border border-[#4285F4]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex flex-col items-center justify-center gap-1 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10v9"/><path d="m15 13-3 3-3-3"/><path d="M20 21H4a2 2 0 0 1-2-2v-4.57c0-1.2.66-2.3 1.71-2.83l2.84-1.42A3 3 0 0 1 8 10h8a3 3 0 0 1 1.45.38l2.84 1.42c1.05.53 1.71 1.63 1.71 2.83V19a2 2 0 0 1-2 2Z"/><path d="M8 10V6a4 4 0 1 1 8 0v4"/></svg>
+                    <span class="text-[10px] font-semibold leading-tight text-center">Simpan Drive</span>
+                </button>
+
+                <button onclick="trySendPdf()" class="w-full bg-[#25D366]/80 hover:bg-[#25D366] text-white border border-[#25D366]/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex flex-col items-center justify-center gap-1 active:scale-95">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                    Kirim ke WA (PDF)
+                    <span class="text-[10px] font-semibold leading-tight text-center">Kirim PDF</span>
+                </button>
+
+                <button onclick="generateWebLinkAndQR()" class="col-span-2 sm:col-span-3 lg:col-span-1 w-full bg-purple-700/80 hover:bg-purple-600 text-white border border-purple-500/30 py-2.5 px-3 rounded-lg text-sm transition-all shadow-lg flex flex-row lg:flex-col items-center justify-center gap-2 lg:gap-1 active:scale-95">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <span class="text-[11px] lg:text-[10px] font-semibold leading-tight text-center">Buat Web & QR</span>
                 </button>
             </div>
 
             <form id="invitationForm" onsubmit="event.preventDefault();">
+                
                 <fieldset>
                     <legend>Pengaturan Umum</legend>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 mb-0">
@@ -178,6 +146,7 @@
                                 <option value="kristen">Kristen</option>
                             </select>
                         </div>
+                        
                         <div class="input-group mb-0">
                             <label class="input-label" for="susunan">Susunan Nama Mempelai</label>
                             <select id="susunan" class="input-field cursor-pointer" onchange="aturPosisiForm(); saveToLocalStorage();">
@@ -316,7 +285,7 @@
 
                         <div class="order-3 input-group mb-0">
                             <label class="input-label" for="jamResepsi">Waktu / Pukul Resepsi</label>
-                            <input type="text" id="jamResepsi" class="input-field" value="" placeholder="Contoh: 11.00 WITA - Selesai">
+                            <input type="text" id="jamResepsi" class="input-field" value="" placeholder="Contoh: 11.00 WITA s/d Selesai">
                         </div>
 
                         <div class="order-5 input-group mb-0">
@@ -327,6 +296,12 @@
                         <div class="order-7 input-group mb-0">
                             <label class="input-label" for="alamatResepsi">Alamat Lengkap Resepsi</label>
                             <textarea id="alamatResepsi" rows="2" class="input-field resize-none" placeholder="Contoh: Jl. Nikel Raya, Balla Parang, Kec. Rappocini, Kota Makassar"></textarea>
+                        </div>
+                        
+                        <div class="order-9 input-group mb-0 mt-2 border-t border-gold-500/20 pt-3">
+                            <label class="input-label text-gold-300" for="maps_link">Link Google Maps Resepsi</label>
+                            <input type="url" id="maps_link" class="input-field border-gold-500/30" value="" placeholder="https://maps.app.goo.gl/...">
+                            <p class="text-[10px] text-gray-500 italic mt-1">Wajib diisi jika ingin membuat Link Web Undangan & QR Code.</p>
                         </div>
                     </div>
                 </fieldset>
@@ -372,7 +347,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
         <!-- ================= KANAN: PREVIEW & TOMBOL SALIN ================= -->
         <div class="w-full lg:w-1/2 mt-4 lg:mt-0 flex flex-col gap-6 lg:gap-8">
-            
             <div id="previewBox" class="bg-dark-800 p-1 md:p-1.5 rounded-xl border border-gold-500/30 shadow-2xl">
                 <div class="bg-dark-900 rounded-lg p-4 md:p-6 flex flex-col relative">
                     <div class="flex justify-between items-center mb-4">
@@ -475,19 +449,124 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         </button>
     </div>
 
-    <!-- Modal & Toast -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-full shadow-2xl flex items-center gap-2 md:gap-3 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span id="toast-message" class="font-medium">Teks berhasil disalin!</span>
+   <!-- Modal & Toast -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 translate-y-full opacity-0 bg-green-600 text-white px-5 md:px-6 py-2.5 md:py-3 rounded-lg shadow-2xl flex items-center gap-3 md:gap-4 transition-all duration-300 z-50 pointer-events-none w-max max-w-[90vw] text-sm md:text-base border border-green-500/50">
+        <div class="flex flex-col gap-0.5">
+            <span class="font-medium text-green-100">Berhasil ✓</span>
+           <span id="toast-message" class="text-xs text-white opacity-90 break-words"></span>
+        </div>
     </div>
 
+    <!-- MODAL AUTENTIKASI (Login & Sign Up) -->
+    <div id="authModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none p-4">
+        <div id="authModalContent" class="bg-dark-800 border border-gold-500/30 p-5 md:p-6 rounded-xl shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-300 relative">
+            <h3 id="authModalTitle" class="text-gold-500 font-serif text-lg md:text-xl mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                Login
+            </h3>
+            
+            <form id="authForm" onsubmit="handleAuth(event)">
+                <div class="space-y-3">
+                    <div class="input-group mb-0">
+                        <label class="input-label" for="authUsername">Username</label>
+                        <input type="text" id="authUsername" class="input-field" required placeholder="Masukkan username">
+                    </div>
+                    
+                    <div id="signupFields" class="hidden space-y-3">
+                        <div class="input-group mb-0 mt-3">
+                            <label class="input-label" for="authNamaPercetakan">Nama Percetakan</label>
+                            <input type="text" id="authNamaPercetakan" class="input-field" placeholder="Nama percetakan/toko Anda">
+                        </div>
+                        <div class="input-group mb-0 mt-3">
+                            <label class="input-label" for="authWa">Nomor WhatsApp</label>
+                            <input type="text" id="authWa" class="input-field" placeholder="Contoh: 08123456789">
+                        </div>
+                    </div>
+
+                    <div class="input-group mb-0 mt-3 relative">
+                        <label class="input-label" for="authPassword">Password</label>
+                        <input type="password" id="authPassword" class="input-field pr-10" required placeholder="Masukkan password">
+                        <button type="button" onclick="togglePasswordVisibility('authPassword', 'eyeIcon1')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                            <svg id="eyeIcon1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+
+                    <div id="confirmPasswordField" class="hidden input-group mb-0 mt-3 relative">
+                        <label class="input-label" for="authConfirmPassword">Konfirmasi Password</label>
+                        <input type="password" id="authConfirmPassword" class="input-field pr-10" placeholder="Ulangi password">
+                        <button type="button" onclick="togglePasswordVisibility('authConfirmPassword', 'eyeIcon2')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                            <svg id="eyeIcon2" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95 mt-6">Login</button>
+            </form>
+
+            <div class="mt-5 text-center text-xs text-gray-400">
+                <span id="authToggleText">Belum punya akun?</span> 
+                <button type="button" onclick="toggleAuthMode()" id="authToggleBtn" class="text-gold-500 font-semibold hover:underline">Sign Up</button>
+            </div>
+            
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors" title="Tutup">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT PROFILE -->
+    <div id="editProfileModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none p-4">
+        <div id="editProfileModalContent" class="bg-dark-800 border border-gold-500/30 p-5 md:p-6 rounded-xl shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-300 relative">
+            <h3 class="text-gold-500 font-serif text-lg md:text-xl mb-4 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                Edit Profile
+            </h3>
+            
+            <form id="editProfileForm" onsubmit="handleEditProfile(event)">
+    <div class="space-y-3">
+        <div class="input-group mb-0">
+            <label class="input-label" for="editNamaPercetakan">Nama Percetakan</label>
+            <input type="text" id="editNamaPercetakan" class="input-field" required>
+        </div>
+        <div class="input-group mb-0">
+            <label class="input-label" for="editWa">Nomor WhatsApp</label>
+            <input type="text" id="editWa" class="input-field" required>
+        </div>
+        <div class="input-group mb-0 relative">
+            <label class="input-label" for="editPassword">Password Baru <span class="text-[10px] text-gray-500 normal-case ml-1">(Kosongkan jika tidak diubah)</span></label>
+            <input type="password" id="editPassword" class="input-field pr-10" placeholder="Password baru">
+            <button type="button" onclick="togglePasswordVisibility('editPassword', 'eyeIconEdit')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                <svg id="eyeIconEdit" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+        </div>
+        
+        <!-- TAMBAHAN: Kolom Konfirmasi Password -->
+        <div class="input-group mb-0 relative">
+            <label class="input-label" for="editConfirmPassword">Konfirmasi Password Baru</label>
+            <input type="password" id="editConfirmPassword" class="input-field pr-10" placeholder="Ulangi password baru">
+            <button type="button" onclick="togglePasswordVisibility('editConfirmPassword', 'eyeIconEditConfirm')" class="absolute right-3 top-[26px] text-gray-400 hover:text-gold-500 focus:outline-none">
+                <svg id="eyeIconEditConfirm" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+        </div>
+    </div>
+    
+    <button type="submit" id="editProfileSubmitBtn" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95 mt-6">Simpan Perubahan</button>
+</form>
+            
+            <button onclick="closeEditProfileModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors" title="Tutup">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL ALERT UMUM -->
     <div id="customModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden transition-all duration-300 opacity-0 pointer-events-none p-4">
         <div id="modalContent" class="bg-dark-800 border border-gold-500/30 p-5 md:p-6 rounded-xl shadow-2xl max-w-sm w-full transform scale-95 transition-transform duration-300">
             <h3 class="text-gold-500 font-serif text-lg md:text-xl mb-3 flex items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                 Pemberitahuan
             </h3>
-            <p id="modalMessage" class="text-gray-300 text-sm mb-6 leading-relaxed"></p>
+            <p id="modalMessage" class="text-gray-300 text-sm mb-6 leading-relaxed whitespace-pre-wrap"></p>
             <button onclick="closeModal()" class="w-full bg-gradient-to-r from-gold-700 to-gold-500 hover:from-gold-500 hover:to-gold-300 text-black font-semibold py-2.5 rounded-lg transition-all shadow-lg active:scale-95">Mengerti</button>
         </div>
     </div>
@@ -511,14 +590,20 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
         </div>
     </div>
 
+    <!-- KONTAINER TERSEMBUNYI UNTUK MERENDER QR CODE SEBELUM DI-DOWNLOAD -->
+    <div id="qrContainer" style="display:none;"></div>
+
     <script>
+        // ================= KONFIGURASI =================
+        const BASE_WEB_URL = "https://undangan-webvip.vercel.app/?id="; 
+
         // ================= INSTANSIASI SUPABASE =================
         const { createClient } = supabase;
         const SUPABASE_URL = "https://qnnacckoyfzrmvobwccb.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubmFjY2tveWZ6cm12b2J3Y2NiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIwOTIxNTEsImV4cCI6MjEwNzY2ODE1MX0.XbLOSpq1ylDjkxrDqoQBJIFAZp6RhsDiCiXn6kF9NjA";
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // DAFTAR FIELD 
+        // DAFTAR FIELD (namaPercetakan & usernamePercetakan telah dihapus)
         const fieldIds = [
             'kodeUndangan', 'jumlahUndangan',
             'jenisUndangan', 'susunan', 'wNama', 'wPanggilan', 'wAnak', 'wBapak', 'wIbu', 
@@ -526,7 +611,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'teksPengantarAcara', 
             'tanggalAkad', 'jamAkad', 'tempatAkad', 'alamatAkad', 
             'tanggalResepsi', 'jamResepsi', 'tempatResepsi', 'alamatResepsi', 'keteranganResepsi', 
-            'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
+            'maps_link', 'turutMengundang', 'hormat', 'teksPembuka', 'teksPenutup'
         ];
 
         const fieldNamesDisplay = {
@@ -549,6 +634,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'jamResepsi': 'Waktu / Pukul Resepsi',
             'tempatResepsi': 'Nama Tempat Resepsi',
             'alamatResepsi': 'Alamat Lengkap Resepsi',
+            'maps_link': 'Link Google Maps',
             'keteranganResepsi': 'Keterangan Tambahan Resepsi',
             'turutMengundang': 'Turut Mengundang',
             'hormat': 'Hormat Kami (Tuan Rumah)',
@@ -556,6 +642,469 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             'teksPenutup': 'Teks Penutup',
             'teksPengantarAcara': 'Teks Pengantar Acara'
         };
+
+        // --- MANAJEMEN AUTENTIKASI LOGIN / SIGNUP ---
+        let isSignUp = false;
+let waRealtimeChannel = null; // Variabel global penyimpan koneksi realtime
+
+        function renderAuth() {
+            const userStr = localStorage.getItem('user_percetakan');
+            const authContainer = document.getElementById('authContainer');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                authContainer.innerHTML = `
+                    <span class="text-xs md:text-sm text-gold-300 font-semibold truncate max-w-[150px] mr-2" title="${user.nama}">${user.nama}</span>
+                    
+                    <button id="btnDownloadWa" onclick="downloadWaData()" class="bg-green-700/80 hover:bg-green-600 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-green-500/30 transition-all shadow-lg active:scale-95 mr-2 flex items-center gap-1 relative overflow-hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span id="waCountText">Data WA</span>
+                    </button>
+
+                    <button onclick="openEditProfileModal()" class="bg-gray-700/80 hover:bg-gray-600 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-gray-500/30 transition-all shadow-lg active:scale-95 mr-2">Edit Profile</button>
+                    <button onclick="handleLogout()" class="bg-red-900/80 hover:bg-red-700 text-white text-[10px] md:text-xs py-1.5 px-3 rounded-lg border border-red-500/30 transition-all shadow-lg active:scale-95">Logout</button>
+                `;
+                
+                // Jalankan sistem Realtime
+                initWaRealtimeCounter(user.username);
+                
+            } else {
+                authContainer.innerHTML = `
+                    <button onclick="openAuthModal()" class="bg-blue-700/80 hover:bg-blue-600 text-white text-[10px] md:text-xs font-semibold py-2 px-4 rounded-lg border border-blue-500/30 transition-all shadow-lg active:scale-95">Login / Sign Up</button>
+                `;
+            }
+        }
+   
+        function openAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                document.getElementById('authModalContent').classList.replace('scale-95', 'scale-100');
+            }, 10);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('authModalContent').classList.replace('scale-100', 'scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('authForm').reset();
+                if (isSignUp) toggleAuthMode(); // Kembalikan ke mode login
+            }, 300);
+        }
+
+        function toggleAuthMode() {
+            isSignUp = !isSignUp;
+            const titleEl = document.getElementById('authModalTitle');
+            const signupFields = document.getElementById('signupFields');
+            const confirmField = document.getElementById('confirmPasswordField');
+            
+            if (isSignUp) {
+                titleEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg> Daftar Baru (Sign Up)`;
+                signupFields.classList.remove('hidden');
+                confirmField.classList.remove('hidden');
+                document.getElementById('authSubmitBtn').textContent = 'Daftar & Login';
+                document.getElementById('authToggleText').textContent = 'Sudah punya akun?';
+                document.getElementById('authToggleBtn').textContent = 'Login';
+                document.getElementById('authNamaPercetakan').required = true;
+                document.getElementById('authWa').required = true;
+                document.getElementById('authConfirmPassword').required = true;
+            } else {
+                titleEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login`;
+                signupFields.classList.add('hidden');
+                confirmField.classList.add('hidden');
+                document.getElementById('authSubmitBtn').textContent = 'Login';
+                document.getElementById('authToggleText').textContent = 'Belum punya akun?';
+                document.getElementById('authToggleBtn').textContent = 'Sign Up';
+                document.getElementById('authNamaPercetakan').required = false;
+                document.getElementById('authWa').required = false;
+                document.getElementById('authConfirmPassword').required = false;
+            }
+        }
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === "password") {
+                input.type = "text";
+                icon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>`; // Icon mata dicoret
+            } else {
+                input.type = "password";
+                icon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>`; // Icon mata biasa
+            }
+        }
+
+      async function handleAuth(e) {
+    e.preventDefault();
+    const username = document.getElementById('authUsername').value.trim().toLowerCase().replace(/\s+/g, '');
+    const password = document.getElementById('authPassword').value;
+    const btn = document.getElementById('authSubmitBtn');
+    const originalText = btn.textContent;
+    
+    btn.textContent = 'Memproses...';
+    btn.disabled = true;
+
+    try {
+        if (isSignUp) {
+            const nama = document.getElementById('authNamaPercetakan').value.trim();
+            let no_wa = document.getElementById('authWa').value.trim();
+            const confirmPassword = document.getElementById('authConfirmPassword').value;
+
+            // --- FORMAT NOMOR WA ---
+            // Hapus semua karakter selain angka (seperti spasi, strip, atau tanda +)
+            no_wa = no_wa.replace(/\D/g, ''); 
+            // Jika diawali dengan angka 0, ubah menjadi 62
+            if (no_wa.startsWith('0')) {
+                no_wa = '62' + no_wa.slice(1);
+            }
+
+            if (password !== confirmPassword) {
+                showModal("Gagal: Konfirmasi password tidak sesuai!");
+                return;
+            }
+
+            // Pengecekan username
+            const { data: existingUser } = await supabaseClient
+                .from('percetakan')
+                .select('username')
+                .eq('username', username)
+                .limit(1);
+
+            if (existingUser && existingUser.length > 0) {
+                showModal("Gagal: Username sudah terdaftar, silakan pilih yang lain.");
+                return;
+            }
+
+            // Pendaftaran
+            const { data, error } = await supabaseClient
+                .from('percetakan')
+                .insert([{ username: username, nama: nama, password: password, no_wa: no_wa }])
+                .select();
+
+            if (error) throw error;
+
+            localStorage.setItem('user_percetakan', JSON.stringify({ username: data[0].username, nama: data[0].nama }));
+            showToast("Pendaftaran dan login berhasil!");
+            closeAuthModal();
+            renderAuth();
+
+        } else {
+            // Login
+            const { data, error } = await supabaseClient
+                .from('percetakan')
+                .select('username, nama, password')
+                .eq('username', username)
+                .single();
+
+            if (error || !data) {
+                showModal("Gagal: Username tidak ditemukan.");
+                return;
+            }
+            
+            if (data.password !== password) {
+                showModal("Gagal: Password Anda salah!");
+                return;
+            }
+
+            localStorage.setItem('user_percetakan', JSON.stringify({ username: data.username, nama: data.nama }));
+            showToast(`Selamat datang, ${data.nama}!`);
+            closeAuthModal();
+            renderAuth();
+        }
+    } catch (error) {
+        console.error("Autentikasi bermasalah:", error);
+        showModal("Terjadi kesalahan pada sistem autentikasi. Silakan coba lagi.");
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+       function handleLogout() {
+            localStorage.removeItem('user_percetakan');
+            // Putuskan koneksi realtime saat logout agar tidak memberatkan browser
+            if (waRealtimeChannel) {
+                supabaseClient.removeChannel(waRealtimeChannel);
+                waRealtimeChannel = null;
+            }
+            showToast("Anda telah keluar (logout).");
+            renderAuth();
+        }
+
+     async function openEditProfileModal() {
+    const userStr = localStorage.getItem('user_percetakan');
+    if (!userStr) return;
+    const user = JSON.parse(userStr);
+
+    const btn = document.getElementById('editProfileSubmitBtn');
+    btn.textContent = 'Memuat Data...';
+    btn.disabled = true;
+
+    const modal = document.getElementById('editProfileModal');
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        document.getElementById('editProfileModalContent').classList.replace('scale-95', 'scale-100');
+    }, 10);
+
+    try {
+        const { data, error } = await supabaseClient
+            .from('percetakan')
+            .select('nama, no_wa')
+            .eq('username', user.username)
+            .single();
+
+        if (data) {
+            document.getElementById('editNamaPercetakan').value = data.nama || '';
+            
+            let displayWa = data.no_wa || '';
+            if (displayWa.startsWith('62')) {
+                displayWa = '0' + displayWa.substring(2);
+            }
+            document.getElementById('editWa').value = displayWa;
+        }
+    } catch (err) {
+        console.error("Gagal memuat profil:", err);
+    } finally {
+        document.getElementById('editPassword').value = '';
+        document.getElementById('editConfirmPassword').value = ''; // Kosongkan form konfirmasi
+        btn.textContent = 'Simpan Perubahan';
+        btn.disabled = false;
+    }
+}
+
+// --- FUNGSI DOWNLOAD DATA WA KE EXCEL (UPDATED) ---
+        async function downloadWaData() {
+            const userStr = localStorage.getItem('user_percetakan');
+            if (!userStr) return;
+            const user = JSON.parse(userStr);
+
+            const btn = document.getElementById('btnDownloadWa');
+            const originalHtml = btn.innerHTML;
+            
+            // Ubah state tombol saat loading
+            btn.innerHTML = 'Memuat...';
+            btn.disabled = true;
+
+            try {
+               // TAHAP 1: Ambil semua data undangan milik percetakan yang login
+                console.log("User Login saat ini:", user.username);
+
+                const { data: undanganData, error: errUndangan } = await supabaseClient
+                    .from('data_undangan')
+                    .select('id, url_undangan')
+                    .eq('usernamePercetakan', user.username);
+
+                console.log("Error Undangan:", errUndangan);
+                console.log("Data Undangan yang didapat:", undanganData);
+
+                if (errUndangan) throw errUndangan;
+
+                if (!undanganData || undanganData.length === 0) {
+                    showModal("Belum ada data undangan untuk percetakan Anda. (Silakan cek Console F12 untuk detailnya)");
+                    return;
+                }
+
+                // Ekstrak semua ID undangan milik percetakan ini
+                const weddingIds = undanganData.map(u => u.id);
+
+                // TAHAP 2: Ambil nomor WA yang memiliki wedding_id dari daftar di atas
+                const { data: waData, error: errWa } = await supabaseClient
+                    .from('pengingat_wa')
+                    .select('nomor_wa, created_at, wedding_id')
+                    .in('wedding_id', weddingIds)
+                    .order('created_at', { ascending: false });
+
+                if (errWa) throw errWa;
+
+                if (!waData || waData.length === 0) {
+                    showModal("Belum ada data nomor WhatsApp untuk percetakan Anda.");
+                    return;
+                }
+
+                // TAHAP 3: Gabungkan dan format data untuk Excel
+                const excelData = waData.map((item, index) => {
+                    const undangan = undanganData.find(u => u.id === item.wedding_id);
+                    
+                    const tgl = new Date(item.created_at).toLocaleDateString('id-ID', {
+                        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    return {
+                        "No": index + 1,
+                        "Nomor WhatsApp": item.nomor_wa,
+                        "URL Undangan": undangan && undangan.url_undangan ? (BASE_WEB_URL + undangan.url_undangan) : '-',
+                        "Tanggal Dibuat": tgl
+                    };
+                });
+
+                // Proses generate Excel (XLSX)
+                const ws = XLSX.utils.json_to_sheet(excelData);
+                ws['!cols'] = [
+                    { wch: 5 },  // No
+                    { wch: 20 }, // Nomor WhatsApp
+                    { wch: 50 }, // URL Undangan
+                    { wch: 25 }  // Tanggal
+                ];
+                
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Data WA");
+
+                const tanggalBulanTahun = new Date().toISOString().split('T')[0];
+                XLSX.writeFile(wb, `Data_WA_${user.username}_${tanggalBulanTahun}.xlsx`);
+                
+                showToast("File Excel Data WA berhasil diunduh!");
+
+            } catch (err) {
+                console.error("Gagal mengunduh data WA:", err);
+                showModal("Terjadi kesalahan saat mengambil data dari server. Pastikan koneksi internet stabil.");
+            } finally {
+                // Kembalikan state tombol
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        }
+
+        // --- SISTEM SUPABASE REALTIME UNTUK COUNTER NOMOR WA ---
+        let currentWaCount = 0;
+        let userWeddingIds = [];
+
+        async function initWaRealtimeCounter(username) {
+            try {
+                // 1. Ambil daftar ID undangan milik percetakan yang sedang login
+                const { data: undanganData } = await supabaseClient
+                    .from('data_undangan')
+                    .select('id')
+                    .eq('usernamePercetakan', username);
+                    
+                if (!undanganData || undanganData.length === 0) return;
+                userWeddingIds = undanganData.map(u => u.id);
+                
+                // 2. Hitung jumlah nomor WA saat ini
+                const { count } = await supabaseClient
+                    .from('pengingat_wa')
+                    .select('*', { count: 'exact', head: true })
+                    .in('wedding_id', userWeddingIds);
+                    
+                currentWaCount = count || 0;
+                updateWaButtonUI();
+                
+                // 3. Daftarkan Supabase Realtime Listener (Mendengarkan data baru masuk)
+                if (waRealtimeChannel) supabaseClient.removeChannel(waRealtimeChannel);
+                
+                waRealtimeChannel = supabaseClient.channel('custom-wa-channel')
+                    .on(
+                        'postgres_changes', 
+                        { event: 'INSERT', schema: 'public', table: 'pengingat_wa' }, 
+                        (payload) => {
+                            // Cek apakah nomor WA yang baru masuk adalah milik undangan dari percetakan ini
+                            if (userWeddingIds.includes(payload.new.wedding_id)) {
+                                currentWaCount++;
+                                updateWaButtonUI(true); // true = mainkan animasi
+                            }
+                        }
+                    )
+                    .subscribe();
+                    
+            } catch (err) {
+                console.error("Gagal memuat realtime counter:", err);
+            }
+        }
+
+        function updateWaButtonUI(isNewData = false) {
+            const spanEl = document.getElementById('waCountText');
+            const btnEl = document.getElementById('btnDownloadWa');
+            
+            if (spanEl) {
+                spanEl.textContent = `Data WA (${currentWaCount})`;
+            }
+            
+            // Berikan efek kedip hijau dan toast ketika ada nomor baru masuk
+            if (isNewData && btnEl) {
+                btnEl.classList.add('bg-green-500', 'scale-105'); // Animasi membesar
+                showToast(`🔔 Ada ${currentWaCount} Nomor WA yang telah terdaftar!`);
+                
+                setTimeout(() => {
+                    btnEl.classList.remove('bg-green-500', 'scale-105');
+                }, 1000);
+            }
+        }
+        
+        function closeEditProfileModal() {
+            const modal = document.getElementById('editProfileModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('editProfileModalContent').classList.replace('scale-100', 'scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('editProfileForm').reset();
+            }, 300);
+        }
+
+  async function handleEditProfile(e) {
+    e.preventDefault();
+    const userStr = localStorage.getItem('user_percetakan');
+    if (!userStr) return;
+    const user = JSON.parse(userStr);
+
+    const btn = document.getElementById('editProfileSubmitBtn');
+    const originalText = btn.textContent;
+    btn.textContent = 'Menyimpan...';
+    btn.disabled = true;
+
+    const newNama = document.getElementById('editNamaPercetakan').value.trim();
+    let newWa = document.getElementById('editWa').value.trim();
+    const newPassword = document.getElementById('editPassword').value;
+    const confirmPassword = document.getElementById('editConfirmPassword').value;
+
+    // --- CEK KONFIRMASI PASSWORD ---
+    if (newPassword && newPassword !== confirmPassword) {
+        showModal("Gagal: Konfirmasi password tidak sesuai!");
+        btn.textContent = originalText;
+        btn.disabled = false;
+        return; // Hentikan eksekusi jika password tidak cocok
+    }
+
+    // --- FORMAT NOMOR WA ---
+    newWa = newWa.replace(/\D/g, ''); 
+    if (newWa.startsWith('0')) {
+        newWa = '62' + newWa.slice(1);
+    }
+
+    try {
+        let updates = { nama: newNama, no_wa: newWa };
+        
+        if (newPassword) {
+            updates.password = newPassword;
+        }
+
+        const { data, error } = await supabaseClient
+            .from('percetakan')
+            .update(updates)
+            .eq('username', user.username)
+            .select();
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            throw new Error("Data tidak ditemukan atau akses diblokir oleh sistem (RLS).");
+        }
+
+        localStorage.setItem('user_percetakan', JSON.stringify({ username: user.username, nama: newNama }));
+        
+        showToast("Profil berhasil diperbarui!");
+        closeEditProfileModal();
+        renderAuth(); 
+
+    } catch (error) {
+        console.error("Gagal update profil:", error);
+        showModal(`Gagal: ${error.message || 'Terjadi kesalahan saat memperbarui profil.'}`);
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
 
         // --- SISTEM PELACAKAN DATA UNTUK DIRTY CHECKING & AUTO-SAVE SUPABASE ---
         let lastSavedData = {}; 
@@ -572,41 +1121,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             supabaseSessionId = generateUUID();
             localStorage.setItem('supabaseSessionId', supabaseSessionId);
         }
+        let supabaseDbId = null; // Menyimpan ID UUID bawaan dari tabel Supabase
 
-        async function saveToSupabaseSilently() {
-            const currentData = {};
-            let isChanged = false;
-
-            fieldIds.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    currentData[id] = el.value;
-                    if (currentData[id] !== lastSavedData[id]) {
-                        isChanged = true;
-                    }
-                }
-            });
-
-            if (!isChanged) return;
-
-            // Simpan jejak agar tidak spam update
-            lastSavedData = { ...currentData };
-
-            try {
-                const payload = {
-                    session_id: supabaseSessionId,
-                    ...currentData,
-                    updated_at: new Date().toISOString()
-                };
-                
-                await supabaseClient
-                    .from('data_undangan')
-                    .upsert(payload, { onConflict: 'session_id' });
-                
-            } catch (error) {
-                console.error("Gagal auto-save ke Supabase:", error);
-            }
-        }
 
         // --- MANAJEMEN POSISI KETERANGAN ---
         let ketOrderIndex = parseInt(localStorage.getItem('ketOrderIndex')) || 2; 
@@ -700,11 +1216,9 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             } else {
                 showModal("Format file tidak didukung. Harap unggah file Excel (.xlsx/.xls) atau PDF.");
             }
-
             event.target.value = "";
         }
 
-        // Helper untuk me-resolve filereader sbg Promise
         function readExcelFile(file) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -726,7 +1240,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                     "Susunan Nama (wanita/pria)": "susunan", "Wanita - Nama Lengkap": "wNama", "Wanita - Nama Panggilan": "wPanggilan", "Wanita - Anak Ke-": "wAnak", "Wanita - Nama Bapak": "wBapak", "Wanita - Nama Ibu": "wIbu",
                     "Pria - Nama Lengkap": "pNama", "Pria - Nama Panggilan": "pPanggilan", "Pria - Anak Ke-": "pAnak", "Pria - Nama Bapak": "pBapak", "Pria - Nama Ibu": "pIbu",
                     "Hari & Tanggal Akad": "tanggalAkad", "Waktu Akad": "jamAkad", "Tempat Akad": "tempatAkad", "Alamat Lengkap Akad": "alamatAkad",
-                    "Hari & Tanggal Resepsi": "tanggalResepsi", "Waktu Resepsi": "jamResepsi", "Tempat Resepsi": "tempatResepsi", "Alamat Lengkap Resepsi": "alamatResepsi", "Keterangan Tambahan Resepsi": "keteranganResepsi",
+                    "Hari & Tanggal Resepsi": "tanggalResepsi", "Waktu Resepsi": "jamResepsi", "Tempat Resepsi": "tempatResepsi", "Alamat Lengkap Resepsi": "alamatResepsi", "Link Google Maps": "maps_link", "Keterangan Tambahan Resepsi": "keteranganResepsi",
                     "Turut Mengundang": "turutMengundang", "Hormat Kami (Tuan Rumah)": "hormat"
                 };
 
@@ -754,17 +1268,14 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 }
 
                 if (importCount > 0) {
-                    // Karena ini diimpor dari Excel, kita anggap sebagai data baru (Generate ID Sesi baru)
                     supabaseSessionId = generateUUID();
                     localStorage.setItem('supabaseSessionId', supabaseSessionId);
-                    
-                    // Reset cache dirty-checker agar seluruh data di-push penuh ke DB
                     lastSavedData = {};
 
                     saveToLocalStorage(); 
                     aturPosisiForm();
                     generateText();
-                    await saveToSupabaseSilently(); // Push ke DB sbg INSERT baru
+                    await saveToSupabaseSilently(); 
                     showToast(`Berhasil mengimpor ${importCount} baris data dari Excel!`);
                 } else {
                     showModal("Tidak ada data yang cocok. Pastikan Blangko benar.");
@@ -799,8 +1310,6 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 });
                 
                 if (importCount > 0) {
-                    // Jika file PDF sudah menyimpan Session ID (dari sistem ini), pakai ID tersebut agar menimpa
-                    // Jika tidak (PDF Lama tanpa ID Sesi), anggap sebagai data baru.
                     if (data.supabaseSessionId) {
                         supabaseSessionId = data.supabaseSessionId;
                         localStorage.setItem('supabaseSessionId', supabaseSessionId);
@@ -809,14 +1318,19 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                         localStorage.setItem('supabaseSessionId', supabaseSessionId);
                     }
                     
-                    // Reset cache dirty-checker agar seluruh data di-push penuh
+                    // [BARU] Pulihkan UUID dari Supabase jika tersedia di dalam metadata PDF
+                    if (data.id) {
+                        supabaseDbId = data.id;
+                    } else {
+                        supabaseDbId = null;
+                    }
+                    
                     lastSavedData = {};
-
                     saveToLocalStorage(); 
                     aturPosisiForm();
                     if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
                     generateText();
-                    await saveToSupabaseSilently(); // Push to DB
+                    await saveToSupabaseSilently();
                     showToast(`Berhasil memulihkan data dari PDF!`);
                 } else {
                     showModal("Data di dalam PDF kosong.");
@@ -837,18 +1351,18 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             });
             localStorage.removeItem('invitationData');
             
-            ketOrderIndex = 2; // Reset ke posisi default
+            ketOrderIndex = 2;
             updateKetDOM();
             localStorage.setItem('ketOrderIndex', ketOrderIndex);
 
-            // Buka session baru di Supabase (krn ini pelanggan baru / formulir kosong)
             supabaseSessionId = generateUUID();
             localStorage.setItem('supabaseSessionId', supabaseSessionId);
-            lastSavedData = {}; // Clear tracker
+            lastSavedData = {};
 
             aturPosisiForm();
             gantiJenisUndangan(true);
             generateText();
+            saveToLocalStorage();
         }
 
         function aturPosisiForm() {
@@ -876,28 +1390,28 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                 }
             }
         }
-
+        
         document.addEventListener('DOMContentLoaded', () => {
+            renderAuth(); 
             loadFromLocalStorage();
+
             aturPosisiForm();
             updateKetDOM();
             if (document.getElementById('jenisUndangan')) gantiJenisUndangan(false);
             generateText();
 
-            // Inisialisasi pelacakan Supabase pertama kali halaman dimuat
             fieldIds.forEach(id => {
                 const el = document.getElementById(id);
                 if (el) lastSavedData[id] = el.value;
             });
 
-            const inputs = document.querySelectorAll('input, select, textarea');
+            const inputs = document.querySelectorAll('input:not(#authUsername):not(#authPassword):not(#authNamaPercetakan):not(#authConfirmPassword):not(#authWa):not(#editNamaPercetakan):not(#editWa):not(#editPassword), select, textarea');
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
                     generateText();
                     saveToLocalStorage();
                 });
                 
-                // Memicu sinkronisasi ke Supabase saat meninggalkan form field
                 input.addEventListener('blur', () => {
                     saveToSupabaseSilently();
                 });
@@ -917,13 +1431,13 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
         function copyBrideParent() {
             const text = getParentText('wanita', document.getElementById('wAnak').value, document.getElementById('wBapak').value, document.getElementById('wIbu').value);
-            if (text) executeCopy(text, "Info Orang Tua Mempelai Wanita berhasil disalin!");
+            if (text) executeCopy(text);
             else showModal("Data orang tua mempelai wanita belum lengkap atau disembunyikan.");
         }
         
         function copyGroomParent() {
             const text = getParentText('pria', document.getElementById('pAnak').value, document.getElementById('pBapak').value, document.getElementById('pIbu').value);
-            if (text) executeCopy(text, "Info Orang Tua Mempelai Pria berhasil disalin!");
+            if (text) executeCopy(text);
             else showModal("Data orang tua mempelai pria belum lengkap atau disembunyikan.");
         }
         
@@ -952,7 +1466,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
                     ["Wanita - Nama Lengkap", ""], ["Wanita - Nama Panggilan", ""], ["Wanita - Anak Ke-", ""], ["Wanita - Nama Bapak", ""], ["Wanita - Nama Ibu", ""],
                     ["Pria - Nama Lengkap", ""], ["Pria - Nama Panggilan", ""], ["Pria - Anak Ke-", ""], ["Pria - Nama Bapak", ""], ["Pria - Nama Ibu", ""],
                     ["Hari & Tanggal Akad", ""], ["Waktu Akad", ""], ["Tempat Akad", ""], ["Alamat Lengkap Akad", ""],
-                    ["Hari & Tanggal Resepsi", ""], ["Waktu Resepsi", ""], ["Tempat Resepsi", ""], ["Alamat Lengkap Resepsi", ""], ["Keterangan Tambahan Resepsi", ""],
+                    ["Hari & Tanggal Resepsi", ""], ["Waktu Resepsi", ""], ["Tempat Resepsi", ""], ["Alamat Lengkap Resepsi", ""], ["Link Google Maps", ""], ["Keterangan Tambahan Resepsi", ""],
                     ["Turut Mengundang", ""], ["Hormat Kami (Tuan Rumah)", ""]
                 ];
                 const ws = XLSX.utils.aoa_to_sheet(ws_data);
@@ -970,7 +1484,7 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             let emptyFields = [];
             
             for (let id of fieldIds) {
-                if (id === 'kodeUndangan' || id === 'jenisUndangan' || id === 'susunan') continue;
+                if (id === 'kodeUndangan' || id === 'jenisUndangan' || id === 'susunan' || id === 'maps_link') continue;
                 
                 const el = document.getElementById(id);
                 if (el && el.value.trim() === "") {
@@ -1012,89 +1526,270 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             }, 200);
         }
 
-        async function sendPdfToWhatsApp() {
-            try {
-                const { PDFDocument, StandardFonts, rgb } = PDFLib;
-                const pdfDoc = await PDFDocument.create();
-                let page = pdfDoc.addPage();
-                const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-                
-                const data = {};
-                fieldIds.forEach(id => {
-                    const el = document.getElementById(id);
-                    if(el) data[id] = el.value;
-                });
-                // Sisipkan Session ID agar jika File PDF diimport di perangkat lain, 
-                // Sistem tahu bahwa ini berasal dari sesi DB yang sama
-                data['supabaseSessionId'] = supabaseSessionId;
-                
-                pdfDoc.setSubject(JSON.stringify(data));
-                pdfDoc.setTitle("Data Undangan - " + (data['wPanggilan'] || 'Mempelai'));
+   // 1. Helper untuk mengambil username dari localStorage
+function getCurrentUsername() {
+    const userStr = localStorage.getItem('user_percetakan');
+    return userStr ? JSON.parse(userStr).username : null;
+}
 
-                const text = document.getElementById('previewText').value;
-                const lines = text.split('\n');
-                
-                let y = page.getHeight() - 50;
-                const fontSize = 11;
-                const lineHeight = 16;
-                const margin = 50;
-                
-                for (let line of lines) {
-                    if (y < 50) {
-                        page = pdfDoc.addPage();
-                        y = page.getHeight() - 50;
-                    }
-                    const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
-                    page.drawText(cleanLine, { x: margin, y: y, size: fontSize, font: font, color: rgb(0,0,0) });
-                    y -= lineHeight;
-                }
-              
-                const pdfBytes = await pdfDoc.save();
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                
-                let wNamaLengkap = (data['wNama'] || '').trim();
-                let pNamaLengkap = (data['pNama'] || '').trim();
+// 2. Helper untuk mengambil seluruh data form secara dinamis
+function getFormData() {
+    return fieldIds.reduce((acc, id) => {
+        const el = document.getElementById(id);
+        if (el) acc[id] = el.value;
+        return acc;
+    }, {});
+}
 
-                let namaWanita = (data['wPanggilan'] || '').trim() || (wNamaLengkap ? wNamaLengkap.split(' ')[0] : 'Wanita');
-                let namaPria = (data['pPanggilan'] || '').trim() || (pNamaLengkap ? pNamaLengkap.split(' ')[0] : 'Pria');
-                
-                let susunanMempelai = data['susunan'] || 'wanita';
-                
-                let namaFileGabungan = susunanMempelai === 'pria' 
-                    ? `${namaPria}&${namaWanita}` 
-                    : `${namaWanita}&${namaPria}`;
-                
-                namaFileGabungan = namaFileGabungan.replace(/\s+/g, '');
-                
-                const fileName = `Data_Undangan_${namaFileGabungan}.pdf`;
-                const file = new File([blob], fileName, { type: "application/pdf" });
+// 3. Helper Utama: Membuat PDF (Menggabungkan logika dari WA & Drive)
+async function buildPdfBase() {
+    await saveToSupabaseSilently(); // Pastikan data tersimpan & dapat ID
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        files: [file],
-                        title: 'Data Undangan',
-                        text: 'Berikut file PDF data undangan klien. (Bisa di-import kembali ke sistem)'
-                    });
-                    
-                    clearForm();
-                    showModal("Data berhasil dibagikan dalam format PDF dan form telah dikosongkan.");
-                } else {
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = fileName;
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                    
-                    clearForm();
-                    showModal("Browser Anda tidak mendukung share langsung. File PDF telah diunduh, silakan kirim manual ke WA. Form dikosongkan.");
-                }
-            } catch (error) {
-                showModal("Terjadi kesalahan saat memproses file PDF.");
-            }
+    const { PDFDocument, StandardFonts, rgb } = PDFLib;
+    const pdfDoc = await PDFDocument.create();
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    let page = pdfDoc.addPage();
+    
+    const data = getFormData();
+    const tanggalDibuat = new Date().toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    // Sisipkan metadata
+    data.tanggalDibuat = tanggalDibuat;
+    data.supabaseSessionId = supabaseSessionId;
+    if (supabaseDbId) data.id = supabaseDbId;
+    
+    const username = getCurrentUsername();
+    if (username) data.usernamePercetakan = username;
+
+    pdfDoc.setSubject(JSON.stringify(data));
+    pdfDoc.setTitle("Data Undangan - " + (data.wPanggilan || 'Mempelai'));
+
+    // Gambar teks ke PDF
+    const textToPrint = `Tanggal Pembuatan Data: ${tanggalDibuat}\n\n` + document.getElementById('previewText').value; 
+    let y = page.getHeight() - 50;
+    
+    for (let line of textToPrint.split('\n')) {
+        if (y < 50) {
+            page = pdfDoc.addPage();
+            y = page.getHeight() - 50;
         }
+        const cleanLine = line.replace(/[^\x20-\x7E\xA0-\xFF]/g, '').substring(0, 90);
+        const isHeader = line.startsWith("Tanggal Pembuatan Data:");
+        page.drawText(cleanLine, { x: 50, y, size: isHeader ? 9 : 11, font, color: isHeader ? rgb(0.4,0.4,0.4) : rgb(0,0,0) });
+        y -= 16;
+    }
+
+    // Tentukan Nama File
+    const wNama = (data.wPanggilan || (data.wNama || '').split(' ')[0] || 'Wanita').trim();
+    const pNama = (data.pPanggilan || (data.pNama || '').split(' ')[0] || 'Pria').trim();
+    const namaFileGabungan = (data.susunan === 'pria' ? `${pNama}&${wNama}` : `${wNama}&${pNama}`).replace(/\s+/g, '');
+    
+    return {
+        blob: new Blob([await pdfDoc.save()], { type: "application/pdf" }),
+        fileName: `Data_Undangan_${namaFileGabungan}.pdf`
+    };
+}
+
+// --- 1. Fungsi Bantuan untuk Membuat URL (Slug) ---
+function generateUrlUndangan() {
+    const getSlug = (id) => {
+        const el = document.getElementById(id);
+        return el ? el.value.trim().toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+    };
+    const panggilW = getSlug('wPanggilan');
+    const panggilP = getSlug('pPanggilan');
+    const isPria = document.getElementById('susunan').value === 'pria';
+    
+    // Jangan buat URL jika kedua nama masih kosong
+    if (!panggilW && !panggilP) return null; 
+
+    // Atur susunan nama berdasarkan pilihan form
+    return isPria ? `${panggilP}-${panggilW}` : `${panggilW}-${panggilP}`;
+}
+
+// --- 2. Ganti Fungsi saveToSupabaseSilently() yang Lama ---
+async function saveToSupabaseSilently() {
+    const currentData = getFormData();
+    const isChanged = fieldIds.some(id => currentData[id] !== lastSavedData[id]);
+
+    if (!isChanged && supabaseDbId) return { url_undangan: generateUrlUndangan() }; // Lewati jika tidak ada perubahan
+    lastSavedData = { ...currentData };
+
+    try {
+        const username = getCurrentUsername();
+        let slug = generateUrlUndangan();
+        
+        const payload = {
+            session_id: supabaseSessionId,
+            ...currentData,
+            updated_at: new Date().toISOString(),
+            ...(username && { usernamePercetakan: username }) 
+        };
+
+        // Masukkan url_undangan ke dalam payload jika nama sudah diisi
+        if (slug) {
+            payload.url_undangan = slug;
+        }
+
+        let { data, error } = await supabaseClient
+            .from('data_undangan')
+            .upsert(payload, { onConflict: 'session_id' })
+            .select('id, url_undangan')
+            .single();
+
+        // Jika URL bentrok di database (error kode 23505 / unique violation), tambahkan angka acak
+        if (error?.code === '23505' && slug) {
+            payload.url_undangan = `${slug}-${Math.floor(Math.random() * 1000)}`;
+            const retry = await supabaseClient
+                .from('data_undangan')
+                .upsert(payload, { onConflict: 'session_id' })
+                .select('id, url_undangan')
+                .single();
+            data = retry.data;
+            error = retry.error;
+        }
+
+        if (error) throw error;
+        if (data?.id) supabaseDbId = data.id;
+        
+        return data; // Return data agar bisa dipakai oleh fungsi Buat Web & QR
+    } catch (error) {
+        console.error("Gagal auto-save ke Supabase:", error);
+        return null;
+    }
+}
+
+// --- 3. Ganti Fungsi generateWebLinkAndQR() yang Lama ---
+async function generateWebLinkAndQR() {
+    const reqFields = ['wPanggilan', 'pPanggilan', 'tanggalResepsi', 'jamResepsi', 'maps_link'];
+    const missing = reqFields.filter(id => !document.getElementById(id).value.trim())
+                             .map(id => fieldNamesDisplay[id] || id);
+
+    if (missing.length > 0) {
+        return showModal("Syarat pembuatan Link belum lengkap:\n- " + missing.join("\n- "));
+    }
+
+    const btn = event.currentTarget; // Jika dipanggil dari tombol
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<span class="text-[11px] font-semibold">Memproses...</span>';
+    btn.disabled = true;
+
+    try {
+        // Panggil fungsi save utama agar data diproses, dan ambil URL-nya
+        const savedData = await saveToSupabaseSilently();
+        
+        if (!savedData || !savedData.url_undangan) {
+            throw new Error("Gagal mengambil atau membuat URL Undangan dari database.");
+        }
+
+        const finalUrl = BASE_WEB_URL + savedData.url_undangan;
+        executeCopy(finalUrl, false);
+        showModal(`Tautan Undangan Web berhasil dibuat!\n\nLink tersalin: ${finalUrl}\n\nQR Code otomatis terunduh dalam beberapa detik.`);
+
+        const qrContainer = document.getElementById('qrContainer');
+        qrContainer.innerHTML = ""; 
+        new QRCode(qrContainer, { text: finalUrl, width: 500, height: 500, colorDark: "#0A1128", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H });
+
+        setTimeout(() => {
+            const originalCanvas = qrContainer.querySelector('canvas');
+            if (originalCanvas) {
+                // Membuat canvas baru dengan ukuran lebih besar untuk pinggiran putih
+                const padding = 40; // Lebar pinggiran putih dalam pixel (bisa disesuaikan)
+                const newCanvas = document.createElement('canvas');
+                newCanvas.width = originalCanvas.width + (padding * 2);
+                newCanvas.height = originalCanvas.height + (padding * 2);
+                
+                const ctx = newCanvas.getContext('2d');
+                
+                // Isi background canvas baru dengan warna putih
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, newCanvas.width, newCanvas.height);
+                
+                // Gambar QR Code asli ke posisi tengah canvas baru
+                ctx.drawImage(originalCanvas, padding, padding);
+
+                // Unduh hasil dari canvas yang baru (yang sudah memiliki pinggiran)
+                const a = Object.assign(document.createElement('a'), { 
+                    href: newCanvas.toDataURL("image/png"), 
+                    download: `QR_Undangan_${savedData.url_undangan}.png` 
+                });
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            }
+        }, 800);
+
+    } catch (err) {
+        console.error(err);
+        showModal("Terjadi kesalahan sistem saat menyimpan tautan ke database Supabase.");
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
+}
+
+async function sendPdfToWhatsApp() {
+    try {
+        // Panggil helper pembuat PDF
+        const { blob, fileName } = await buildPdfBase();
+        const file = new File([blob], fileName, { type: "application/pdf" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'Data Undangan',
+                text: 'Berikut file PDF data undangan klien. (Bisa di-import kembali ke sistem)'
+            });
+            showModal("Data berhasil dibagikan dalam format PDF dan form telah dikosongkan.");
+        } else {
+            const url = URL.createObjectURL(blob);
+            const a = Object.assign(document.createElement('a'), { href: url, download: fileName });
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+            showModal("Browser Anda tidak mendukung share langsung. File PDF telah diunduh, silakan kirim manual ke WA. Form dikosongkan.");
+        }
+        clearForm();
+    } catch (error) {
+        showModal("Terjadi kesalahan saat memproses file PDF.");
+        console.error(error);
+    }
+}
+
+async function uploadPdfToDrive() {
+    const btn = document.getElementById('btnUploadDrive');
+    const originalContent = btn.innerHTML;
+    
+    btn.innerHTML = '<svg class="animate-spin h-4 w-4 lg:mx-auto lg:mb-1 mr-2 lg:mr-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span class="text-[10px] font-semibold leading-tight">Proses...</span>';
+    btn.disabled = true;
+
+    try {
+        const { blob, fileName } = await buildPdfBase();
+        const base64Data = await blobToBase64(blob);
+
+        const formData = new URLSearchParams({
+            fileName: fileName,
+            mimeType: 'application/pdf',
+            fileData: base64Data
+        });
+
+        const response = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: formData });
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+            executeCopy(result.url, false);
+            clearForm();
+        } else throw new Error(result.message);
+
+    } catch (error) {
+        console.error(error);
+        showModal("Terjadi kesalahan saat mengunggah file ke Google Drive.");
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
+    }
+}
 
         function isValid(str) { return str && str.trim() !== '' && str.trim() !== '-'; }
 
@@ -1109,6 +1804,18 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             else text = text.trim().replace(/ dari$/, "");
             
             return text;
+        }
+
+        function formatTeksWaktu(waktuVal) {
+            if (!waktuVal) return "";
+            let wkt = waktuVal.toLowerCase().includes("pukul") ? waktuVal : `Pukul ${waktuVal}`;
+            
+            return wkt.split(/\s+/).map(w => {
+                if (!w) return "";
+                let lowerW = w.toLowerCase();
+                if (lowerW === 's/d' || lowerW === 's.d' || lowerW === 's.d.') return lowerW;
+                return lowerW.charAt(0).toUpperCase() + lowerW.slice(1);
+            }).join(' ');
         }
 
         function generateText() {
@@ -1130,10 +1837,8 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
 
             const ket = document.getElementById('keteranganResepsi').value.trim();
 
-            const jAkad = document.getElementById('jamAkad').value.trim();
-            const jResepsi = document.getElementById('jamResepsi').value.trim();
-            let jamAkadText = jAkad ? (jAkad.toLowerCase().includes("pukul") ? jAkad : `Pukul ${jAkad}`) : "";
-            let jamResepsiText = jResepsi ? (jResepsi.toLowerCase().includes("pukul") ? jResepsi : `Pukul ${jResepsi}`) : "";
+            let jamAkadText = formatTeksWaktu(document.getElementById('jamAkad').value.trim());
+            let jamResepsiText = formatTeksWaktu(document.getElementById('jamResepsi').value.trim());
 
             const teksPembuka = document.getElementById('teksPembuka').value;
             const teksPenutup = document.getElementById('teksPenutup').value;
@@ -1142,25 +1847,14 @@ Wassalamu'alaikum Warahmatullahi Wabarakatuh</textarea>
             const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
             const judulAkad = (jenis === 'kristen') ? 'PEMBERKATAN' : 'AKAD NIKAH';
 
-            // --- Logika Urutan Resepsi Dinamis ---
             let resBlock = `Hari/Tanggal: ${document.getElementById('tanggalResepsi').value.trim()}`;
             
-            // Posisi 1 (Atas Waktu)
             if (ketOrderIndex === 1 && ket) resBlock += `\n${ket}`;
-            
             if (jamResepsiText) resBlock += `\n${jamResepsiText}`;
-            
-            // Posisi 2 (Bawah Waktu)
             if (ketOrderIndex === 2 && ket) resBlock += `\n${ket}`;
-            
             resBlock += `\nBertempat di\n${document.getElementById('tempatResepsi').value.trim()}`;
-            
-            // Posisi 3 (Bawah Tempat)
             if (ketOrderIndex === 3 && ket) resBlock += `\n${ket}`;
-            
             resBlock += `\n${document.getElementById('alamatResepsi').value.trim()}`;
-            
-            // Posisi 4 (Bawah Alamat)
             if (ketOrderIndex === 4 && ket) resBlock += `\n${ket}`;
 
             document.getElementById('previewText').value = `${teksPembuka}
@@ -1190,110 +1884,158 @@ ${document.getElementById('hormat').value.trim()}
 ${turutMengundangText}`;
         }
 
+        const getVal = (id, fallback = '') => document.getElementById(id)?.value.trim() || fallback;
+
+        const parseDateString = dateString => {
+            const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
+            return match ? { tanggal: match[1], bulan: match[2], tahun: match[3] } : null;
+        };
+
         function copyCorelFileName() {
             const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const tglHariIni = `${yyyy}.${mm}.${dd}`;
-
-            const kode = document.getElementById('kodeUndangan').value.trim() || 'KODE';
-            const panggilW = (document.getElementById('wPanggilan').value.trim() || 'Wanita').replace(/\s+/g, '');
-            const panggilP = (document.getElementById('pPanggilan').value.trim() || 'Pria').replace(/\s+/g, '');
+            const tglHariIni = `${today.getFullYear()}.${String(today.getMonth() + 1).padStart(2, '0')}.${String(today.getDate()).padStart(2, '0')}`;
             
-            const susunan = document.getElementById('susunan').value;
+            const kode = getVal('kodeUndangan', 'KODE');
+            const panggilW = getVal('wPanggilan', 'Wanita').replace(/\s+/g, '');
+            const panggilP = getVal('pPanggilan', 'Pria').replace(/\s+/g, '');
+            const susunan = getVal('susunan');
             const namaPanggilan = susunan === 'pria' ? `${panggilP}&${panggilW}` : `${panggilW}&${panggilP}`;
-            
-            const jumlah = document.getElementById('jumlahUndangan').value.trim() || '0';
-            
-            const fileName = `${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`;
-            
-            executeCopy(fileName, "Nama File Corel berhasil disalin!");
+            const jumlah = getVal('jumlahUndangan', '0');
+
+            executeCopy(`${tglHariIni} ${kode} ${namaPanggilan} x${jumlah}`);
         }
 
-        function copyFullText() { executeCopy(document.getElementById('previewText').value, "Seluruh teks berhasil disalin!"); }
-        function copyGroomName() { executeCopy(document.getElementById('pNama').value.trim(), "Nama Mempelai Pria berhasil disalin!"); }
-        function copyBrideName() { executeCopy(document.getElementById('wNama').value.trim(), "Nama Mempelai Wanita berhasil disalin!"); }
-        function copyTanggalAkad() { 
-            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            executeCopy(document.getElementById('tanggalAkad').value.trim(), `Tanggal ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
+        function copyFullText() { 
+            const text = getVal('previewText');
+            text ? executeCopy(text, true) : showModal("Teks undangan (Preview) masih kosong."); 
         }
-        function copyTanggalResepsi() { executeCopy(document.getElementById('tanggalResepsi').value.trim(), "Tanggal Resepsi Full berhasil disalin!"); }
+
+        function copyGroomName() { 
+            const text = getVal('pNama');
+            text ? executeCopy(text) : showModal("Nama Lengkap Mempelai Pria masih kosong."); 
+        }
+
+        function copyBrideName() { 
+            const text = getVal('wNama');
+            text ? executeCopy(text) : showModal("Nama Lengkap Mempelai Wanita masih kosong."); 
+        }
+
+        function copyTanggalAkad() { 
+            const text = getVal('tanggalAkad');
+            text ? executeCopy(text) : showModal("Hari & Tanggal Akad/Pemberkatan masih kosong."); 
+        }
+
+        function copyTanggalResepsi() { 
+            const text = getVal('tanggalResepsi');
+            text ? executeCopy(text) : showModal("Hari & Tanggal Resepsi masih kosong."); 
+        }
 
         function copyHariResepsi() {
-            let tgl = document.getElementById('tanggalResepsi').value.trim();
-            let hari = tgl.split(',')[0].trim();
-            if (hari) executeCopy(hari, "Hari Resepsi berhasil disalin!");
-            else showModal("Format hari resepsi tidak ditemukan.");
-        }
-        
-        function parseDateString(dateString) {
-            const match = dateString.match(/(\d{1,2})[\s\-\/]+([a-zA-Z]+|\d{1,2})[\s\-\/]+(\d{4})/);
-            return match ? {tanggal: match[1], bulan: match[2], tahun: match[3]} : null;
-        }
-        function copyResepsiTanggalSaja() { 
-            const p = parseDateString(document.getElementById('tanggalResepsi').value.trim()); 
-            if(p) executeCopy(p.tanggal, "Tanggal (Angka) disalin!"); 
-            else showModal("Format tanggal tidak valid."); 
-        }
-        
-        function copyTglDanWaktuAkad() {
-            let tgl = document.getElementById('tanggalAkad').value.trim();
-            let wkt = document.getElementById('jamAkad').value.trim();
-            let wktText = wkt ? (wkt.toLowerCase().includes("pukul") ? wkt : `Pukul ${wkt}`) : "";
-            
-            const combined = (tgl || wkt) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
-            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
-            
-            if (!combined) { showModal(`Tanggal dan Waktu ${label.toLowerCase()} kosong.`); return; }
-            executeCopy(combined, `Tanggal & Waktu ${label} disalin!`);
-        }
-
-        function copyResepsiBulanTahun() {
-            const p = parseDateString(document.getElementById('tanggalResepsi').value.trim());
-            if (p) executeCopy(`${p.bulan}\n${p.tahun}`, "Bulan & Tahun Resepsi disalin!");
-            else showModal("Format tanggal resepsi tidak valid.");
+            const tanggalResepsi = getVal('tanggalResepsi');
+            if (tanggalResepsi) {
+                const hari = tanggalResepsi.split(',')[0].trim();
+                hari ? executeCopy(hari) : showModal("Format hari resepsi tidak ditemukan.");
+            } else {
+                showModal("Hari & Tanggal Resepsi masih kosong.");
+            }
         }
 
         function copyAlamatAkad() { 
-            const j = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            executeCopy(`Bertempat di\n${document.getElementById('tempatAkad').value.trim()}\n${document.getElementById('alamatAkad').value.trim()}`, `Alamat ${j === 'kristen' ? 'Pemberkatan' : 'Akad'} berhasil disalin!`); 
+            const tempat = getVal('tempatAkad');
+            const alamat = getVal('alamatAkad');
+            (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Akad/Pemberkatan masih kosong."); 
         }
-        function copyAlamatResepsi() { executeCopy(`Bertempat di\n${document.getElementById('tempatResepsi').value.trim()}\n${document.getElementById('alamatResepsi').value.trim()}`, "Alamat Resepsi berhasil disalin!"); }
-        function copyKeteranganResepsi() { const ket = document.getElementById('keteranganResepsi').value.trim(); if(ket) executeCopy(ket, "Keterangan resepsi disalin!"); else showModal("Kolom Keterangan masih kosong."); }
-        function copyTurutMengundang() {
-            const lines = document.getElementById('turutMengundang').value.split('\n').filter(l => l.trim() !== '');
-            if(lines.length === 0) showModal("Belum ada nama Pengundang.");
-            else executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'), "Daftar Turut Mengundang disalin!");
-        }
-        function copyHostName() { executeCopy(document.getElementById('hormat').value.trim(), "Nama yang mengundang disalin!"); }
-        function copyAkadTime() { 
-            const jenis = document.getElementById('jenisUndangan') ? document.getElementById('jenisUndangan').value : 'muslim';
-            const label = jenis === 'kristen' ? 'Pemberkatan' : 'Akad';
-            const j = document.getElementById('jamAkad').value.trim(); 
-            if(!j){showModal(`Waktu ${label.toLowerCase()} kosong.`); return;} 
-            executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, `Waktu ${label.toLowerCase()} disalin!`); 
-        }
-        function copyResepsiTime() { const j = document.getElementById('jamResepsi').value.trim(); if(!j){showModal("Waktu resepsi kosong."); return;} executeCopy(j.toLowerCase().includes("pukul")?j:`Pukul ${j}`, "Waktu resepsi disalin!"); }
 
-        function executeCopy(textToCopy, successMsg) {
+        function copyAlamatResepsi() { 
+            const tempat = getVal('tempatResepsi');
+            const alamat = getVal('alamatResepsi');
+            (tempat || alamat) ? executeCopy(`Bertempat di\n${tempat}\n${alamat}`) : showModal("Lokasi Resepsi masih kosong."); 
+        }
+
+        function copyResepsiTanggalSaja() { 
+            const p = parseDateString(getVal('tanggalResepsi')); 
+            p ? executeCopy(p.tanggal) : showModal("Format tanggal tidak valid."); 
+        }
+
+        function copyTglDanWaktuAkad() {
+            const tgl = getVal('tanggalAkad');
+            const wktText = formatTeksWaktu(getVal('jamAkad'));
+            const combined = (tgl || wktText) ? `${tgl} | ${wktText}`.replace(/^ \| | \| $/g, '') : '';
+            
+            combined ? executeCopy(combined) : showModal(`Tanggal dan Waktu kosong.`);
+        }
+
+        function copyResepsiBulanTahun() {
+            const p = parseDateString(getVal('tanggalResepsi'));
+            p ? executeCopy(`${p.bulan}\n${p.tahun}`) : showModal("Format tanggal resepsi tidak valid.");
+        }
+
+        function copyKeteranganResepsi() { 
+            const ket = getVal('keteranganResepsi'); 
+            ket ? executeCopy(ket) : showModal("Kolom Keterangan masih kosong."); 
+        }
+
+        function copyTurutMengundang() {
+            const lines = getVal('turutMengundang').split('\n').filter(l => l.trim() !== '');
+            lines.length === 0 ? showModal("Belum ada nama Pengundang.") : executeCopy(lines.map(l => `* ${l.trim()}`).join('\n'));
+        }
+
+        function copyHostName() { 
+            const host = getVal('hormat'); 
+            host ? executeCopy(host) : showModal("Nama Pengundang (Hormat Kami) masih kosong."); 
+        }
+
+        function copyAkadTime() { 
+            const j = getVal('jamAkad'); 
+            j ? executeCopy(formatTeksWaktu(j)) : showModal(`Waktu kosong.`); 
+        }
+
+        function copyResepsiTime() { 
+            const j = getVal('jamResepsi'); 
+            j ? executeCopy(formatTeksWaktu(j)) : showModal("Waktu resepsi kosong."); 
+        }
+
+        function executeCopy(textToCopy, hideText = false) {
             if (!textToCopy) return;
-            const temp = document.createElement("textarea");
-            temp.value = textToCopy; temp.style.position = "fixed"; temp.style.opacity = "0";
-            document.body.appendChild(temp); temp.focus(); temp.select();
-            try { document.execCommand('copy') ? showToast(successMsg) : console.error('Gagal menyalin.'); } catch (err) {}
-            document.body.removeChild(temp);
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    if (hideText) {
+                        showToast(" ");
+                    } else {
+                        const lineCount = textToCopy.split('\n').length;
+                        const textSizeClass = lineCount > 10 ? 'text-[10px] leading-tight' : 'text-xs';
+                        const cleanText = textToCopy.replace(/\n/g, '<br>');
+                        showToast(`<span class="${textSizeClass} font-semibold text-gold-300 block">${cleanText}</span>`);
+                    }
+                })
+                .catch(err => console.error('Gagal menyalin:', err));
         }
 
         let toastTimeout;
         function showToast(message) {
             const toast = document.getElementById('toast');
-            if (message) document.getElementById('toast-message').textContent = message;
+            if (message) document.getElementById('toast-message').innerHTML = message;
+            
             if (toastTimeout) clearTimeout(toastTimeout);
-            toast.classList.replace('toast-exit', 'toast-enter');
-            toastTimeout = setTimeout(() => toast.classList.replace('toast-enter', 'toast-exit'), 3000);
+            
+            toast.classList.remove('toast-exit', 'translate-y-full', 'opacity-0');
+            toast.classList.add('toast-enter');
+            
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+            }, 3000);
         }
-    </script>
+
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw6AZCbRl8yUvWFuiStX5dvcoHg8PMz_02I-c4Ag2cw79hKLBKwPHY_qunbc47tdP5k/exec";
+
+        function blobToBase64(blob) {
+            return new Promise((resolve, _) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(blob);
+            });
+        }
+ </script>
 </body>
 </html>
